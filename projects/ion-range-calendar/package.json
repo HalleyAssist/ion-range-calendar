@@ -1,0 +1,26 @@
+{
+  "name": "@googlproxer/ion-range-calendar",
+  "version": "1.0.0",
+  "peerDependencies": {
+    "@angular/common": "^13.2.0",
+    "@angular/core": "^13.2.0"
+  },
+  "license": "MIT",
+  "description": "ion-range-calendar is an Ionic Angular range calendar",
+  "homepage": "https://github.com/HalleyAssist/ion-range-calendar",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/HalleyAssist/ion-range-calendar"
+  },
+  "bugs": {
+    "url": "https://github.com/HalleyAssist/ion-range-calendar/issues"
+  },
+  "keywords": [
+    "Angular 8+",
+    "ion-range-calendar",
+    "Ionic 4+"
+  ],
+  "dependencies": {
+    "tslib": "^2.3.0"
+  }
+}

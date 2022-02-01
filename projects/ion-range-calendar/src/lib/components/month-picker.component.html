@@ -1,0 +1,7 @@
+<div [class]="'month-picker ' + color">
+  <div class="month-packer-item"
+    [class.this-month]=" i === _thisMonth.getMonth() && month.original.year === _thisMonth.getFullYear()"
+    *ngFor="let item of _monthFormat; let i = index">
+    <button type="button" (click)="_onSelect(i)">{{ item }}</button>
+  </div>
+</div>

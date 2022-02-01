@@ -1,0 +1,39 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "ion-range-calendar": {
+      "projectType": "library",
+      "root": "projects/ion-range-calendar",
+      "sourceRoot": "projects/ion-range-calendar/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/ion-range-calendar/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/ion-range-calendar/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/ion-range-calendar/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/ion-range-calendar/src/test.ts",
+            "tsConfig": "projects/ion-range-calendar/tsconfig.spec.json",
+            "karmaConfig": "projects/ion-range-calendar/karma.conf.js"
+          }
+        }
+      }
+    }
+  },
+  "defaultProject": "ion-range-calendar"
+}

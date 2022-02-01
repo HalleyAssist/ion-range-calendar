@@ -1,0 +1,5 @@
+<ion-toolbar [class]="'week-toolbar ' + color" no-border-top>
+  <ul [class]="'week-title ' + color">
+    <li *ngFor="let w of _displayWeekArray">{{ w }}</li>
+  </ul>
+</ion-toolbar>
