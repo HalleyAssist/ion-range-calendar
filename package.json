@@ -7,9 +7,10 @@
     "build": "ng build",
     "build:prod": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "publish": "cd dist/ion-range-calendar && npm publish --access public && cd ../.."
   },
-  "private": true,
+  "private": false,
   "dependencies": {
     "@angular/animations": "^13.2.0",
     "@angular/common": "^13.2.0",
