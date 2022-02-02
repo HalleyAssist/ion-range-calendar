@@ -247,15 +247,14 @@ export class CalendarModal implements OnInit, AfterViewInit {
    * shadowRoot descendants don't cause a browser repaint.
    * See for more details: https://github.com/Polymer/polymer/issues/4701
    */
-  repaintDOM() {
-    return this.content.getScrollElement().then(scrollElem => {
-      // Update scrollElem to ensure that height of the container changes as Months are appended/prepended
-      scrollElem.style.zIndex = '2';
-      scrollElem.style.zIndex = 'initial';
-      // Update monthsEle to ensure selected state is reflected when tapping on a day
-      this.monthsEle.nativeElement.style.zIndex = '2';
-      this.monthsEle.nativeElement.style.zIndex = 'initial';
-    });
+  async repaintDOM() {
+    const scrollElem = await this.content.getScrollElement();
+    // Update scrollElem to ensure that height of the container changes as Months are appended/prepended
+    scrollElem.style.zIndex = '2';
+    scrollElem.style.zIndex = 'initial';
+    // Update monthsEle to ensure selected state is reflected when tapping on a day
+    this.monthsEle.nativeElement.style.zIndex = '2';
+    this.monthsEle.nativeElement.style.zIndex = 'initial';
   }
 
   findInitMonthNumber(date: Date): number {

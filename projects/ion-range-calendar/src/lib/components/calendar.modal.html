@@ -34,14 +34,14 @@
   [ngClass]="{'multi-selection': _d.pickMode === 'multi'}">
 
   <div #months>
-    <ng-template *ngFor="let month of calendarMonths; index as i; trackBy: trackByIndex">
+    <ng-container *ngFor="let month of calendarMonths; index as i; trackBy: trackByIndex">
       <div class="month-box" [attr.id]="'month-' + i">
         <h4 class="text-center month-title">{{ _monthFormat(month.original.date) }}</h4>
         <ion-range-calendar-month [month]="month" [pickMode]="_d.pickMode" [isSaveHistory]="_d.isSaveHistory"
           [id]="_d.id" [color]="_d.color" (change)="onChange($event)" [(ngModel)]="datesTemp">
         </ion-range-calendar-month>
       </div>
-    </ng-template>
+    </ng-container>
 
   </div>
 

@@ -1,7 +1,7 @@
 <div [class]="color">
-  <ng-template [ngIf]="!_isRange" [ngIfElse]="rangeBox">
+  <ng-container *ngIf="!_isRange; else rangeBox">
     <div class="days-box">
-      <ng-template *ngFor="let day of month.days; trackBy: trackByTime">
+      <ng-container *ngFor="let day of month.days; trackBy: trackByTime">
         <div class="days">
           <ng-container *ngIf="day">
             <button type='button' [class]="'days-btn ' + day.cssClass" [class.today]="day.isToday"
@@ -13,13 +13,13 @@
             </button>
           </ng-container>
         </div>
-      </ng-template>
+      </ng-container>
     </div>
-  </ng-template>
+  </ng-container>
 
   <ng-template #rangeBox>
     <div class="days-box">
-      <ng-template *ngFor="let day of month.days; trackBy: trackByTime">
+      <ng-container *ngFor="let day of month.days; trackBy: trackByTime">
         <div class="days" [class.startSelection]="isStartSelection(day)" [class.endSelection]="isEndSelection(day)"
           [class.is-first-wrap]="day?.isFirst" [class.is-last-wrap]="day?.isLast" [class.between]="isBetween(day)">
           <ng-container *ngIf="day">
@@ -33,7 +33,7 @@
           </ng-container>
 
         </div>
-      </ng-template>
+      </ng-container>
     </div>
   </ng-template>
 </div>
