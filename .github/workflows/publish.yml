@@ -20,19 +20,19 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-          
+
       # Setup .npmrc file to publish to npm
       - uses: actions/setup-node@v2
         with:
-          node-version: '16.x'
-          registry-url: 'https://registry.npmjs.org'
+          node-version: "16.x"
+          registry-url: "https://registry.npmjs.org"
 
       - name: Read release version
         run: |
           VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
           echo ::set-output name=release_version::${VERSION}
         id: version
-      
+
       - name: Version Module
         run: |
           echo "Setting version to ${{ steps.version.outputs.release_version }}"
@@ -41,10 +41,13 @@ jobs:
 
       - name: Install Angular CLI
         run: npm i -g @angular/cli@13
-        
+
+      - name: Install Packages
+        run: npm i
+
       - name: Build
         run: npm run build:prod
-        
+
       - name: publish
         run: npm run publish
         env:
