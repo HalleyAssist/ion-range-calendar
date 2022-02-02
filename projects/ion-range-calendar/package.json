@@ -1,6 +1,6 @@
 {
   "name": "@googlproxer/ion-range-calendar",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "peerDependencies": {
     "@angular/common": "^13.2.0",
     "@angular/core": "^13.2.0"
