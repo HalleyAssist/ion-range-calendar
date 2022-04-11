@@ -22,7 +22,7 @@
     "@angular/router": "^13.3.0",
     "@ionic/angular": "^6.0.13",
     "ionicons": "^6.0.1",
-    "moment": "^2.29.1",
+    "moment": "^2.29.2",
     "moment-timezone": "^0.5.34",
     "rxjs": "^7.5.5",
     "tslib": "^2.3.0",
