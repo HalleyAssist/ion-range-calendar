@@ -10,8 +10,7 @@ export class CalendarWeekComponent {
   _weekArray: string[] = defaults.WEEKS_FORMAT;
   _displayWeekArray: string[] = this._weekArray;
   _weekStart = 0;
-  @Input()
-  color: string = defaults.COLOR;
+  @Input() color: string = defaults.COLOR;
 
   constructor() { }
 

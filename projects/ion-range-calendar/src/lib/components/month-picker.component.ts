@@ -8,12 +8,10 @@ import { defaults } from '../config';
   templateUrl: 'month-picker.component.html',
 })
 export class MonthPickerComponent {
-  @Input()
-  month: CalendarMonth;
-  @Input()
-  color = defaults.COLOR;
-  @Output()
-  select: EventEmitter<number> = new EventEmitter();
+  @Input() month: CalendarMonth;
+  @Input() color = defaults.COLOR;
+  @Output() select: EventEmitter<number> = new EventEmitter();
+
   _thisMonth = new Date();
   _monthFormat = defaults.MONTH_FORMAT;
 

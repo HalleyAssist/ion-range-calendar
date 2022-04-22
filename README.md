@@ -3,7 +3,7 @@
 [![NPM version][npm-image]][npm-url]
 [![MIT License][license-image]][license-url]
 
-Forked from : https://github.com/hsuanxyz/ion2-calendar
+Forked from : https://github.com/hsuanxyz/ion-range-calendar
 
 * Supports date range.
 * Supports multi date.
@@ -29,7 +29,7 @@ import { NgModule } from '@angular/core';
 import { IonicApp, IonicModule } from '@ionic/angular';
 import { MyApp } from './app.component';
 ...
-import { CalendarModule } from 'ion2-calendar';
+import { CalendarModule } from '@googlproxer/ion-range-calendar';
 
 @NgModule({
   declarations: [
@@ -53,7 +53,7 @@ import { NgModule } from '@angular/core';
 import { IonicApp, IonicModule } from 'ionic-angular';
 import { MyApp } from './app.component';
 ...
-import { CalendarModule } from "ion2-calendar";
+import { CalendarModule } from "ion-range-calendar";
 
 @NgModule({
   declarations: [
@@ -114,7 +114,7 @@ export class HomePage {
 
 ```typescript
 import { Component } from '@angular/core';
-import { CalendarComponentOptions } from 'ion2-calendar';
+import { CalendarComponentOptions } from '@googlproxer/ion-range-calendar';
 
 @Component({
   selector: 'page-home',
@@ -141,7 +141,7 @@ export class HomePage {
 
 ```typescript
 import { Component } from '@angular/core';
-import { CalendarComponentOptions } from 'ion2-calendar';
+import { CalendarComponentOptions } from '@googlproxer/ion-range-calendar';
 
 @Component({
   selector: 'page-home',
@@ -196,12 +196,13 @@ export class HomePage {
 | weekdays          | Array<string>           | `['S', 'M', 'T', 'W', 'T', 'F', 'S']` | weeks text                                        |
 | weekStart         | number                  | `0` (0 or 1)                                                                           | set week start day                                |
 | daysConfig        | Array<**_DaysConfig_**> | `[]` | days configuration                                |
+| maxRange          | number                  | 0 | The maximum range of the selection in days                        |
 
 # As Modal
 
 ### Basic
 
-Import ion2-calendar in component controller.
+Import ion-range-calendar in component controller.
 
 ```typescript
 import { Component } from '@angular/core';
@@ -211,7 +212,7 @@ import {
   CalendarModalOptions,
   DayConfig,
   CalendarResult
-} from 'ion2-calendar';
+} from '@googlproxer/ion-range-calendar';
 
 @Component({
   selector: 'page-home',
@@ -415,6 +416,7 @@ openCalendar() {
 | daysConfig                | Array<**_DaysConfig_**>  | `[]` | days configuration                                         |
 | step                      | number                   | `12` | month load stepping interval to when scroll                |
 | defaultEndDateToStartDate | boolean                  | `false` | makes the end date optional, will default it to the start  |
+| maxRange          | number                  | 0 | The maximum range of the selection in days                        |
 
 ### onDidDismiss Output `{ data } = event`
 
@@ -455,7 +457,7 @@ openCalendar() {
 | months  | number |
 | date    | number |
 
-[npm-image]: https://img.shields.io/npm/v/@googlproxer/ion2-calendar.svg
-[npm-url]: https://www.npmjs.com/package/@googlproxer/ion2-calendar
+[npm-image]: https://img.shields.io/npm/v/@googlproxer/ion-range-calendar.svg
+[npm-url]: https://www.npmjs.com/package/@googlproxer/ion-range-calendar
 [license-image]: https://img.shields.io/badge/license-MIT-blue.svg?style=flat
 [license-url]: LICENSE

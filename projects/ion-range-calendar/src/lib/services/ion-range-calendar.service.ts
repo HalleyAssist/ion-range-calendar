@@ -16,6 +16,9 @@ const isBoolean = (input: any) => input === true || input === false;
 
 @Injectable({ providedIn: 'root' })
 export class IonRangeCalendarService {
+
+  public opts: CalendarModalOptions;
+
   private readonly defaultOpts: CalendarModalOptions;
 
   constructor(
@@ -60,9 +63,10 @@ export class IonRangeCalendarService {
       showAdjacentMonthDay = true,
       defaultEndDateToStartDate = false,
       clearLabel = null,
+      maxRange = 0,
     } = { ...this.defaultOpts, ...calendarOptions };
 
-    return {
+    this.opts = {
       id,
       from,
       to,
@@ -93,7 +97,9 @@ export class IonRangeCalendarService {
       defaultEndDateToStartDate,
       clearLabel,
       clearIcon,
+      maxRange,
     };
+    return this.opts;
   }
 
   createOriginalCalendar(time: number): CalendarOriginal {

@@ -63,22 +63,14 @@ export class IonRangeCalendarComponent implements ControlValueAccessor, OnInit {
 
   monthOpt: CalendarMonth;
 
-  @Input()
-  format: string = defaults.DATE_FORMAT;
-  @Input()
-  type: CalendarComponentTypeProperty = 'string';
-  @Input()
-  readonly = false;
-  @Output()
-  change: EventEmitter<CalendarComponentPayloadTypes> = new EventEmitter();
-  @Output()
-  monthChange: EventEmitter<CalendarComponentMonthChange> = new EventEmitter();
-  @Output()
-  select: EventEmitter<CalendarDay> = new EventEmitter();
-  @Output()
-  selectStart: EventEmitter<CalendarDay> = new EventEmitter();
-  @Output()
-  selectEnd: EventEmitter<CalendarDay> = new EventEmitter();
+  @Input() format: string = defaults.DATE_FORMAT;
+  @Input() type: CalendarComponentTypeProperty = 'string';
+  @Input() readonly = false;
+  @Output() change: EventEmitter<CalendarComponentPayloadTypes> = new EventEmitter();
+  @Output() monthChange: EventEmitter<CalendarComponentMonthChange> = new EventEmitter();
+  @Output() select: EventEmitter<CalendarDay> = new EventEmitter();
+  @Output() selectStart: EventEmitter<CalendarDay> = new EventEmitter();
+  @Output() selectEnd: EventEmitter<CalendarDay> = new EventEmitter();
 
   @Input()
   set options(value: CalendarComponentOptions) {

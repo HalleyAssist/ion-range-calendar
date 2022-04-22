@@ -1,0 +1,68 @@
+name: Test Component
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    types:
+      - opened
+      - reopened
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Cache Node Modules
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ runner.OS }}-node_modules-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Cache Angular Webpack
+        uses: actions/cache@v2
+        with:
+          path: .angular
+          key: ${{ runner.OS }}-angular-webpack-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Install Global Packages
+        run: npm i -g @angular/cli
+
+      - name: Install Packages
+        run: npm i
+
+      - name: Install Dependencies
+        run: |
+          apt update
+          apt install -y libpangocairo-1.0-0 libx11-xcb1 libxcomposite1 libxcursor1 libxdamage1 libxi6 libxtst6 libnss3 libcups2 libxss1 libxrandr2 libgconf2-4 libasound2 libatk1.0-0 libgtk-3-0 libgbm1
+
+      - name: Test
+        run: npm run test:ci
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Cache Node Modules
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ runner.OS }}-node_modules-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Cache Angular Webpack
+        uses: actions/cache@v2
+        with:
+          path: .angular
+          key: ${{ runner.OS }}-angular-webpack-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Install Global Packages
+        run: npm i -g @angular/cli
+
+      - name: Install Packages
+        run: npm i
+
+      - name: Build
+        run: npm run build

@@ -1,0 +1,20 @@
+<ion-app>
+  <ion-header>
+    <ion-toolbar>
+      <ion-title> Example App </ion-title>
+
+      <ion-buttons slot="end">
+        <ion-button (click)="onClick()">
+          <ion-label> Open Modal </ion-label>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content>
+
+    <ion-range-calendar [(ngModel)]="date" (change)="onChange($event)" [type]="'moment'" [format]="'YYYY-MM-DD'">
+    </ion-range-calendar>
+
+  </ion-content>
+</ion-app>

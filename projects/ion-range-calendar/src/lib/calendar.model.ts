@@ -87,6 +87,7 @@ export interface CalendarModalOptions extends CalendarOptions {
   defaultDateRange?: { from: DefaultDate; to?: DefaultDate } | null;
   step?: number;
   defaultEndDateToStartDate?: boolean;
+  maxRange?: number;
 }
 
 export interface CalendarComponentOptions extends CalendarOptions {

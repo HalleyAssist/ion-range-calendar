@@ -22,16 +22,12 @@ const NUM_OF_MONTHS_TO_CREATE = 3;
   templateUrl: 'calendar.modal.html',
 })
 export class CalendarModal implements OnInit, AfterViewInit {
-  @ViewChild(IonContent)
-  content: IonContent;
-  @ViewChild('months')
-  monthsEle: ElementRef;
+  @ViewChild(IonContent) content: IonContent;
+  @ViewChild('months') monthsEle: ElementRef;
 
-  @HostBinding('class.ion-page')
-  ionPage = true;
+  @HostBinding('class.ion-page') ionPage = true;
 
-  @Input()
-  options: CalendarModalOptions;
+  @Input() options: CalendarModalOptions;
 
   datesTemp: Array<CalendarDay> = [null, null];
   calendarMonths: Array<CalendarMonth>;
