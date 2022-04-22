@@ -178,7 +178,7 @@ export class MonthComponent implements ControlValueAccessor, AfterViewInit {
         this.selectStart.emit(this._date[0]);
         let end = moment(this._date[0].time).add(range, 'days');
         //  if end is after service.opts.to, set end to service.opts.to
-        if (end.isAfter(this.service.opts.to)) end = moment(this.service.opts.to);
+        if (end.isAfter(this.service.opts.to)) end = moment(this.service.opts.to).startOf('day');
         this._date[1].time = +end;
         this.selectEnd.emit(this._date[1]);
       }
@@ -202,7 +202,7 @@ export class MonthComponent implements ControlValueAccessor, AfterViewInit {
 
   // if max range and end minus max range is greater than start, set start to end minus max range
   private adjustStart(maxRange: number) {
-    if (maxRange && this._date[1].time - maxRange > this._date[0].time) {
+    if (maxRange > 0 && this._date[1].time - maxRange > this._date[0].time) {
       this._date[0].time = +moment(this._date[1].time).subtract(this.service.opts.maxRange - 1, 'days');
       this.selectStart.emit(this._date[0]);
     }
@@ -210,7 +210,7 @@ export class MonthComponent implements ControlValueAccessor, AfterViewInit {
 
   //  if max range and start plus max range is less than end, set end to start plus max range
   private adjustEnd(maxRange: number) {
-    if (maxRange && this._date[0].time + maxRange < this._date[1].time) {
+    if (maxRange > 0 && this._date[0].time + maxRange < this._date[1].time) {
       this._date[1].time = +moment(this._date[0].time).add(this.service.opts.maxRange - 1, 'days');
       this.selectEnd.emit(this._date[1]);
     }
