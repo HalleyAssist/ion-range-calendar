@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { ModalController } from '@ionic/angular';
+
+import { CalendarComponentPayloadTypes, CalendarModal, CalendarModalOptions } from 'projects/ion-range-calendar/src/public-api';
+
 import moment from 'moment-timezone';
-import { CalendarModal, CalendarModalOptions } from 'projects/ion-range-calendar/src/public-api';
 
 @Component({
   selector: 'app-root',
@@ -44,7 +46,7 @@ export class AppComponent {
     console.log(data);
   }
 
-  public onChange(event: any) {
+  public onChange(event: CalendarComponentPayloadTypes) {
     console.log(event);
   }
 
