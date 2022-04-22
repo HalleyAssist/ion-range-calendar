@@ -31,7 +31,7 @@ jobs:
         run: npm i -g @angular/cli
 
       - name: Install Packages
-        run: npm i
+        run: npm i --legacy-peer-deps
 
       - name: Test
         run: npm run test:ci
@@ -57,7 +57,7 @@ jobs:
         run: npm i -g @angular/cli
 
       - name: Install Packages
-        run: npm i
+        run: npm i --legacy-peer-deps
 
       - name: Build
         run: npm run build
