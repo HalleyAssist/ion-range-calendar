@@ -40,7 +40,7 @@ jobs:
           mv projects/ion-range-calendar/package.json.new projects/ion-range-calendar/package.json
 
       - name: Install Angular CLI
-        run: npm i -g @angular/cli@13
+        run: npm i -g @angular/cli
 
       - name: Install Packages
         run: npm i
