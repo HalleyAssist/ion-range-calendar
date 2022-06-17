@@ -172,5 +172,7 @@
       }
     }
   },
-  "defaultProject": "ion-range-calendar"
+  "cli": {
+    "analytics": false
+  }
 }
