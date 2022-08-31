@@ -25,7 +25,7 @@
     "@ionic/angular": "^6.1.10",
     "@ionic/core": "^6.1.10",
     "ionicons": "^6.0.2",
-    "moment": "^2.29.3",
+    "moment": "^2.29.4",
     "moment-timezone": "^0.5.35",
     "rxjs": "^7.5.5",
     "tslib": "^2.4.0",
