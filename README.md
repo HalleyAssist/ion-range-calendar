@@ -29,7 +29,7 @@ import { NgModule } from '@angular/core';
 import { IonicApp, IonicModule } from '@ionic/angular';
 import { MyApp } from './app.component';
 ...
-import { CalendarModule } from '@googlproxer/ion-range-calendar';
+import { IonRangeCalendarModule } from '@googlproxer/ion-range-calendar';
 
 @NgModule({
   declarations: [
@@ -38,7 +38,7 @@ import { CalendarModule } from '@googlproxer/ion-range-calendar';
   ],
   imports: [
     IonicModule.forRoot(),
-    CalendarModule
+    IonRangeCalendarModule
   ],
   bootstrap: [MyApp],
   ...
@@ -53,7 +53,7 @@ import { NgModule } from '@angular/core';
 import { IonicApp, IonicModule } from 'ionic-angular';
 import { MyApp } from './app.component';
 ...
-import { CalendarModule } from "ion-range-calendar";
+import { IonRangeCalendarModule } from "ion-range-calendar";
 
 @NgModule({
   declarations: [
@@ -63,7 +63,7 @@ import { CalendarModule } from "ion-range-calendar";
   imports: [
     IonicModule.forRoot(MyApp),
     // See CalendarComponentOptions for options
-    CalendarModule.forRoot({
+    IonRangeCalendarModule.forRoot({
       doneLabel: 'Save',
       closeIcon: true
     })
