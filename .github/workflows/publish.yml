@@ -29,14 +29,14 @@ jobs:
           registry-url: https://registry.npmjs.org
 
       - name: Read release version
+        id: version
         run: |
           VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
-          echo ::set-output name=release_version::${VERSION}
-        id: version
+          echo "release_version=${VERSION}" >> $GITHUB_OUTPUT
 
       - name: Version Module
         run: |
-          echo "Setting version to ${{ steps.version.outputs.release_version }}"
+          echo "Release Version: ${{ steps.version.outputs.release_version }}" >> $GITHUB_STEP_SUMMARY
           cat projects/ion-range-calendar/package.json | jq ".version=\"${{ steps.version.outputs.release_version }}\"" > projects/ion-range-calendar/package.json.new
           mv projects/ion-range-calendar/package.json.new projects/ion-range-calendar/package.json
 

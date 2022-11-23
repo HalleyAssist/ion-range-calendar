@@ -2,6 +2,8 @@ name: Test Component
 
 on:
   push:
+    tags-ignore:
+      - "**" # Ignore tags
   pull_request:
     types:
       - opened
