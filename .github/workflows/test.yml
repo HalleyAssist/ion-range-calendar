@@ -17,23 +17,17 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Cache Node Modules
-        uses: actions/cache@v3
+      - name: Setup node
+        uses: actions/setup-node@v3
         with:
-          path: node_modules
-          key: ${{ runner.OS }}-node_modules-${{ hashFiles('**/package-lock.json') }}
-
-      - name: Cache Angular Webpack
-        uses: actions/cache@v3
-        with:
-          path: .angular
-          key: ${{ runner.OS }}-angular-webpack-${{ hashFiles('**/package-lock.json') }}
+          node-version: 16
+          cache: npm
 
       - name: Install Global Packages
         run: npm i -g @angular/cli
 
       - name: Install Packages
-        run: npm i --legacy-peer-deps
+        run: npm i
 
       - name: Test
         run: npm run test:ci
@@ -43,23 +37,17 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Cache Node Modules
-        uses: actions/cache@v3
+      - name: Setup node
+        uses: actions/setup-node@v3
         with:
-          path: node_modules
-          key: ${{ runner.OS }}-node_modules-${{ hashFiles('**/package-lock.json') }}
-
-      - name: Cache Angular Webpack
-        uses: actions/cache@v3
-        with:
-          path: .angular
-          key: ${{ runner.OS }}-angular-webpack-${{ hashFiles('**/package-lock.json') }}
+          node-version: 16
+          cache: npm
 
       - name: Install Global Packages
         run: npm i -g @angular/cli
 
       - name: Install Packages
-        run: npm i --legacy-peer-deps
+        run: npm i
 
       - name: Build
         run: npm run build
