@@ -2,8 +2,6 @@ name: Test Component
 
 on:
   push:
-    branches:
-      - master
   pull_request:
     types:
       - opened
