@@ -12,8 +12,6 @@ import {
 import { defaults } from '../config';
 import { DEFAULT_CALENDAR_OPTIONS } from './calendar-options.provider';
 
-const isBoolean = (input: any) => input === true || input === false;
-
 @Injectable({ providedIn: 'root' })
 export class IonRangeCalendarService {
 
@@ -149,7 +147,7 @@ export class IonRangeCalendarService {
 
     let _disable = false;
 
-    if (dayConfig && isBoolean(dayConfig.disable)) {
+    if (dayConfig && typeof dayConfig.disable === 'boolean') {
       _disable = dayConfig.disable;
     } else {
       _disable = disableWeeks || isBetween;

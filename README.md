@@ -19,7 +19,7 @@ Forked from : https://github.com/hsuanxyz/ion-range-calendar
 ### Installation
 
 ```bash
- npm i @googlproxer/ion-range-calendar moment moment-timezone
+ npm i @googlproxer/ion-range-calendar
  ```
 
 ### Import module
