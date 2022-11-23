@@ -7,6 +7,10 @@ on:
       - opened
       - reopened
 
+concurrency:
+  group: cal-ci-${{ github.ref }}-test
+  cancel-in-progress: true
+
 jobs:
   test:
     runs-on: ubuntu-latest
