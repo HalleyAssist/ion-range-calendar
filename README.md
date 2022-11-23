@@ -174,29 +174,29 @@ export class HomePage {
 | ----------- | ------------ | -------------------------- |
 | change      | EventEmitter | event for model change     |
 | monthChange | EventEmitter | event for month change     |
-| select      | EventEmitter | event for day select |
-| selectStart | EventEmitter | event for day select |
-| selectEnd   | EventEmitter | event for day select |
+| select      | EventEmitter | event for day select       |
+| selectStart | EventEmitter | event for day select       |
+| selectEnd   | EventEmitter | event for day select       |
 
 ### CalendarComponentOptions
 
 | Name              | Type                    | Default                                                                                | Description                                       |
 | ----------------- | ----------------------- | -------------------------------------------------------------------------------------- | ------------------------------------------------- |
-| from              | Date                    | `new Date()` | start date                                        |
+| from              | Date                    | `new Date()`                                                                           | start date                                        |
 | to                | Date                    | 0 (Infinite)                                                                           | end date                                          |
-| color             | string                  | `'primary'` | 'primary', 'secondary', 'danger', 'light', 'dark' |
-| pickMode          | string                  | `single` | 'multi', 'range', 'single'                        |
-| showToggleButtons | boolean                 | `true` | show toggle buttons                               |
-| showMonthPicker   | boolean                 | `true` | show month picker                                 |
+| color             | string                  | `'primary'`                                                                            | 'primary', 'secondary', 'danger', 'light', 'dark' |
+| pickMode          | string                  | `single`                                                                               | 'multi', 'range', 'single'                        |
+| showToggleButtons | boolean                 | `true`                                                                                 | show toggle buttons                               |
+| showMonthPicker   | boolean                 | `true`                                                                                 | show month picker                                 |
 | monthPickerFormat | Array<string>           | `['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC']` | month picker format                               |
 | defaultTitle      | string                  | ''                                                                                     | default title in days                             |
 | defaultSubtitle   | string                  | ''                                                                                     | default subtitle in days                          |
-| disableWeeks      | Array<number>           | `[]` | week to be disabled (0-6)                         |
-| monthFormat       | string                  | `'MMM YYYY'` | month title format                                |
-| weekdays          | Array<string>           | `['S', 'M', 'T', 'W', 'T', 'F', 'S']` | weeks text                                        |
+| disableWeeks      | Array<number>           | `[]`                                                                                   | week to be disabled (0-6)                         |
+| monthFormat       | string                  | `'MMM YYYY'`                                                                           | month title format                                |
+| weekdays          | Array<string>           | `['S', 'M', 'T', 'W', 'T', 'F', 'S']`                                                  | weeks text                                        |
 | weekStart         | number                  | `0` (0 or 1)                                                                           | set week start day                                |
-| daysConfig        | Array<**_DaysConfig_**> | `[]` | days configuration                                |
-| maxRange          | number                  | 0 | The maximum range of the selection in days                        |
+| daysConfig        | Array<**_DaysConfig_**> | `[]`                                                                                   | days configuration                                |
+| maxRange          | number                  | 0                                                                                      | The maximum range of the selection in days        |
 
 # As Modal
 
@@ -391,32 +391,32 @@ openCalendar() {
 
 | Name                      | Type                     | Default                               | Description                                                |
 | ------------------------- | ------------------------ | ------------------------------------- | ---------------------------------------------------------- |
-| from                      | Date                     | `new Date()` | start date                                                 |
+| from                      | Date                     | `new Date()`                          | start date                                                 |
 | to                        | Date                     | 0 (Infinite)                          | end date                                                   |
-| title                     | string                   | `'CALENDAR'` | title                                                      |
-| color                     | string                   | `'primary'` | 'primary', 'secondary', 'danger', 'light', 'dark'          |
+| title                     | string                   | `'CALENDAR'`                          | title                                                      |
+| color                     | string                   | `'primary'`                           | 'primary', 'secondary', 'danger', 'light', 'dark'          |
 | defaultScrollTo           | Date                     | none                                  | let the view scroll to the default date                    |
 | defaultDate               | Date                     | none                                  | default date data, apply to single                         |
 | defaultDates              | Array<Date>              | none                                  | default dates data, apply to multi                         |
 | defaultDateRange          | { from: Date, to: Date } | none                                  | default date-range data, apply to range                    |
 | defaultTitle              | string                   | ''                                    | default title in days                                      |
 | defaultSubtitle           | string                   | ''                                    | default subtitle in days                                   |
-| cssClass                  | string                   | `''` | Additional classes for custom styles, separated by spaces. |
-| canBackwardsSelected      | boolean                  | `false` | can backwards selected                                     |
-| pickMode                  | string                   | `single` | 'multi', 'range', 'single'                                 |
-| disableWeeks              | Array<number>            | `[]` | week to be disabled (0-6)                                  |
-| closeLabel                | string                   | `CANCEL` | cancel button label                                        |
-| doneLabel                 | string                   | `DONE` | done button label                                          |
+| cssClass                  | string                   | `''`                                  | Additional classes for custom styles, separated by spaces. |
+| canBackwardsSelected      | boolean                  | `false`                               | can backwards selected                                     |
+| pickMode                  | string                   | `single`                              | 'multi', 'range', 'single'                                 |
+| disableWeeks              | Array<number>            | `[]`                                  | week to be disabled (0-6)                                  |
+| closeLabel                | string                   | `CANCEL`                              | cancel button label                                        |
+| doneLabel                 | string                   | `DONE`                                | done button label                                          |
 | clearLabel                | string                   |  null                                 | clear button label                                         |
-| closeIcon                 | boolean                  | `false` | show cancel button icon                                    |
-| doneIcon                  | boolean                  | `false` | show done button icon                                      |
-| monthFormat               | string                   | `'MMM YYYY'` | month title format                                         |
+| closeIcon                 | boolean                  | `false`                               | show cancel button icon                                    |
+| doneIcon                  | boolean                  | `false`                               | show done button icon                                      |
+| monthFormat               | string                   | `'MMM YYYY'`                          | month title format                                         |
 | weekdays                  | Array<string>            | `['S', 'M', 'T', 'W', 'T', 'F', 'S']` | weeks text                                                 |
 | weekStart                 | number                   | `0` (0 or 1)                          | set week start day                                         |
-| daysConfig                | Array<**_DaysConfig_**>  | `[]` | days configuration                                         |
-| step                      | number                   | `12` | month load stepping interval to when scroll                |
-| defaultEndDateToStartDate | boolean                  | `false` | makes the end date optional, will default it to the start  |
-| maxRange          | number                  | 0 | The maximum range of the selection in days                        |
+| daysConfig                | Array<**_DaysConfig_**>  | `[]`                                  | days configuration                                         |
+| step                      | number                   | `12`                                  | month load stepping interval to when scroll                |
+| defaultEndDateToStartDate | boolean                  | `false`                               | makes the end date optional, will default it to the start  |
+| maxRange                  | number                   | 0                                     | The maximum range of the selection in days                 |
 
 ### onDidDismiss Output `{ data } = event`
 
@@ -438,11 +438,11 @@ openCalendar() {
 
 | Name     | Type    | Default  | Description                           |
 | -------- | ------- | -------- | ------------------------------------- |
-| cssClass | string  | `''` | separated by spaces                   |
+| cssClass | string  | `''`     | separated by spaces                   |
 | date     | Date    | required | configured days                       |
 | marked   | boolean | false    | highlight color                       |
 | disable  | boolean | false    | disable                               |
-| title    | string  | none     | displayed title eg: `'today'` |
+| title    | string  | none     | displayed title eg: `'today'`         |
 | subTitle | string  | none     | subTitle subTitle eg: `'New Year\'s'` |
 
 ### CalendarResult

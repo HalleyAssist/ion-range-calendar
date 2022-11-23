@@ -171,7 +171,6 @@ export class IonRangeCalendarService {
       isToday,
       title,
       subTitle,
-      selected: false,
       isLastMonth: typeof month === 'number' ? date.month() < month : false,
       isNextMonth: typeof month === 'number' ? date.month() > month : false,
       marked: dayConfig ? dayConfig.marked || false : false,
