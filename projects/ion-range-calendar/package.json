@@ -1,9 +1,11 @@
 {
   "name": "@googlproxer/ion-range-calendar",
-  "version": "1.2.2",
+  "version": "1.3.0",
   "peerDependencies": {
-    "@angular/common": "^14.2.0",
-    "@angular/core": "^14.2.0"
+    "@angular/common": "^15.0.1",
+    "@angular/core": "^15.0.1",
+    "moment": "^2.29.4",
+    "moment-timezone": "0.5.39"
   },
   "license": "MIT",
   "description": "ion-range-calendar is an Ionic Angular range calendar",
@@ -16,11 +18,11 @@
     "url": "https://github.com/HalleyAssist/ion-range-calendar/issues"
   },
   "keywords": [
-    "Angular 14",
+    "Angular 15",
     "ion-range-calendar",
     "Ionic 6"
   ],
   "dependencies": {
-    "tslib": "^2.3.1"
+    "tslib": "^2.4.1"
   }
 }

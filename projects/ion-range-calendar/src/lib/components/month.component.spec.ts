@@ -32,14 +32,12 @@ describe('MonthComponent', () => {
   const start: CalendarDay = {
     time: +from,
     isToday: false,
-    selected: false,
     disable: false,
     cssClass: '',
   };
   const end: CalendarDay = {
     time: +to,
     isToday: false,
-    selected: false,
     disable: false,
     cssClass: '',
   };

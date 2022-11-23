@@ -130,7 +130,6 @@ export class MonthComponent implements ControlValueAccessor, AfterViewInit {
 
   onSelected(item: CalendarDay): void {
     if (this.readonly) return;
-    item.selected = true;
     this.select.emit(item);
     if (this.pickMode === 'single') {
       this._date[0] = item;

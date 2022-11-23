@@ -12,7 +12,6 @@ export interface CalendarOriginal {
 export interface CalendarDay {
   time: number;
   isToday: boolean;
-  selected: boolean;
   disable: boolean;
   cssClass: string;
   isLastMonth?: boolean;
