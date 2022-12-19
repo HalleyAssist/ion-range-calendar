@@ -1,11 +1,11 @@
 {
   "name": "@googlproxer/ion-range-calendar",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "peerDependencies": {
-    "@angular/common": "^15.0.1",
-    "@angular/core": "^15.0.1",
+    "@angular/common": "^15.0.4",
+    "@angular/core": "^15.0.4",
     "moment": "^2.29.4",
-    "moment-timezone": "0.5.39"
+    "moment-timezone": "^0.5.40"
   },
   "license": "MIT",
   "description": "ion-range-calendar is an Ionic Angular range calendar",
@@ -20,7 +20,8 @@
   "keywords": [
     "Angular 15",
     "ion-range-calendar",
-    "Ionic 6"
+    "Ionic 6",
+    "Range Calendar"
   ],
   "dependencies": {
     "tslib": "^2.4.1"
