@@ -42,7 +42,11 @@ export class IonRangeCalendarService {
       id = '',
       cssClass = '',
       closeLabel = 'CANCEL',
+      closeTitle = '',
       doneLabel = 'DONE',
+      doneTitle = '',
+      clearLabel = 'CLEAR',
+      clearTitle = '',
       monthFormat = 'MMM YYYY',
       title = 'CALENDAR',
       defaultTitle = '',
@@ -60,7 +64,6 @@ export class IonRangeCalendarService {
       disableWeeks = _disableWeeks,
       showAdjacentMonthDay = true,
       defaultEndDateToStartDate = false,
-      clearLabel = null,
       maxRange = 0,
     } = { ...this.defaultOpts, ...calendarOptions };
 
@@ -75,8 +78,13 @@ export class IonRangeCalendarService {
       weekStart,
       closeLabel,
       closeIcon,
+      closeTitle,
       doneLabel,
       doneIcon,
+      doneTitle,
+      clearLabel,
+      clearIcon,
+      clearTitle,
       canBackwardsSelected,
       isSaveHistory,
       disableWeeks,
@@ -93,8 +101,6 @@ export class IonRangeCalendarService {
       defaultDateRange: calendarOptions.defaultDateRange || null,
       showAdjacentMonthDay,
       defaultEndDateToStartDate,
-      clearLabel,
-      clearIcon,
       maxRange,
     };
     return this.opts;
