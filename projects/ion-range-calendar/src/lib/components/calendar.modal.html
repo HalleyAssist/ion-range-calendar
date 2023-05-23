@@ -1,9 +1,10 @@
 <ion-header>
   <ion-toolbar [color]="_d.color">
     <ion-buttons slot="start">
-      <ion-button type='button' slot="icon-only" fill="clear" (click)="onCancel()">
-        <span *ngIf="_d.closeLabel !== '' && !_d.closeIcon">{{ _d.closeLabel }}</span>
-        <ion-icon *ngIf="_d.closeIcon" name="close"></ion-icon>
+      <ion-button type='button' slot="icon-only" fill="clear" (click)="onCancel()"
+        [title]="_d.closeTitle || _d.closeLabel">
+        <ion-label *ngIf="_d.closeLabel">{{ _d.closeLabel }}</ion-label>
+        <ion-icon *ngIf="_d.closeIcon" [slot]="_d.closeLabel ? 'start' : 'icon-only'" name="close"></ion-icon>
       </ion-button>
     </ion-buttons>
 
@@ -11,14 +12,14 @@
 
     <ion-buttons slot="end">
       <ion-button type='button' slot="icon-only" fill="clear" *ngIf="!!_d.clearLabel || !!_d.clearIcon"
-        [disabled]="!canClear()" (click)="clear()">
-        <span *ngIf="_d.clearLabel !== '' && !_d.clearIcon">{{ _d.clearLabel }}</span>
-        <ion-icon *ngIf="_d.clearIcon" name="refresh"></ion-icon>
+        [disabled]="!canClear()" (click)="clear()" [title]="_d.clearTitle || _d.clearLabel">
+        <ion-label *ngIf="_d.clearLabel">{{ _d.clearLabel }}</ion-label>
+        <ion-icon *ngIf="_d.clearIcon" [slot]="_d.clearLabel ? 'end' : 'icon-only'" name="refresh"></ion-icon>
       </ion-button>
       <ion-button type='button' slot="icon-only" *ngIf="!_d.autoDone" fill="clear" [disabled]="!canDone()"
-        (click)="done()">
-        <span *ngIf="_d.doneLabel !== '' && !_d.doneIcon">{{ _d.doneLabel }}</span>
-        <ion-icon *ngIf="_d.doneIcon" name="checkmark"></ion-icon>
+        (click)="done()" [title]="_d.doneTitle || _d.doneLabel">
+        <ion-label *ngIf="_d.doneLabel">{{ _d.doneLabel }}</ion-label>
+        <ion-icon *ngIf="_d.doneIcon" [slot]="_d.doneLabel ? 'end' : 'icon-only'" name="checkmark"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
