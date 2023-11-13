@@ -1,38 +1,50 @@
 <div class="title">
-  <ng-container *ngIf="_showMonthPicker; else title">
-    <ion-button type="button" fill="clear" class="switch-btn" (click)="switchView()">
-      {{ _monthFormat(monthOpt.original.time) }}
-      <ion-icon class="arrow-dropdown"
-        [name]="_view === 'days' ? _compatibleIcons.caretDown : _compatibleIcons.caretUp"></ion-icon>
-    </ion-button>
-  </ng-container>
+  @if (_showMonthPicker) {
+
+  <ion-button type="button" fill="clear" class="switch-btn" (click)="switchView()">
+    {{ _monthFormat(monthOpt.original.time) }}
+    <ion-icon class="arrow-dropdown"
+      [name]="_view === 'days' ? _compatibleIcons.caretDown : _compatibleIcons.caretUp"></ion-icon>
+  </ion-button>
+
+  } @else {
+
+  <div class="switch-btn">
+    {{ _monthFormat(monthOpt.original.time) }}
+  </div>
+
+  }
   <ng-template #title>
     <div class="switch-btn">
       {{ _monthFormat(monthOpt.original.time) }}
     </div>
   </ng-template>
-  <ng-container *ngIf="_showToggleButtons">
-    <ion-button type="button" fill="clear" class="back" [disabled]="!canBack()" (click)="prev()">
-      <ion-icon slot="icon-only" size="small" [name]="_compatibleIcons.chevronBack"></ion-icon>
-    </ion-button>
-    <ion-button type="button" fill="clear" class="forward" [disabled]="!canNext()" (click)="next()">
-      <ion-icon slot="icon-only" size="small" [name]="_compatibleIcons.chevronForward"></ion-icon>
-    </ion-button>
-  </ng-container>
+  @if (_showToggleButtons) {
+
+  <ion-button type="button" fill="clear" class="back" [disabled]="!canBack()" (click)="prev()">
+    <ion-icon slot="icon-only" size="small" [name]="_compatibleIcons.chevronBack"></ion-icon>
+  </ion-button>
+  <ion-button type="button" fill="clear" class="forward" [disabled]="!canNext()" (click)="next()">
+    <ion-icon slot="icon-only" size="small" [name]="_compatibleIcons.chevronForward"></ion-icon>
+  </ion-button>
+
+  }
 </div>
-<ng-container *ngIf="_view === 'days'; else monthPicker">
-  <ion-range-calendar-week color="transparent" [weekArray]="_d.weekdays" [weekStart]="_d.weekStart">
-  </ion-range-calendar-week>
+@if (_view === 'days') {
 
-  <ion-range-calendar-month [componentMode]="true" [(ngModel)]="_calendarMonthValue" [month]="monthOpt"
-    [readonly]="readonly" (change)="onChanged($event)" (swipe)="swipeEvent($event)" (select)="select.emit($event)"
-    (selectStart)="selectStart.emit($event)" (selectEnd)="selectEnd.emit($event)" [pickMode]="_d.pickMode"
-    [color]="_d.color">
-  </ion-range-calendar-month>
-</ng-container>
+<ion-range-calendar-week color="transparent" [weekArray]="_d.weekdays" [weekStart]="_d.weekStart">
+</ion-range-calendar-week>
 
-<ng-template #monthPicker>
-  <ion-range-calendar-month-picker [color]="_d.color" [monthFormat]="_options?.monthPickerFormat"
-    (select)="monthOnSelect($event)" [month]="monthOpt">
-  </ion-range-calendar-month-picker>
-</ng-template>
+<ion-range-calendar-month [componentMode]="true" [(ngModel)]="_calendarMonthValue" [month]="monthOpt"
+  [readonly]="readonly" (change)="onChanged($event)" (swipe)="swipeEvent($event)" (select)="select.emit($event)"
+  (selectStart)="selectStart.emit($event)" (selectEnd)="selectEnd.emit($event)" [pickMode]="_d.pickMode"
+  [color]="_d.color">
+</ion-range-calendar-month>
+
+} @else {
+
+<ion-range-calendar-month-picker [color]="_d.color" [monthFormat]="_options?.monthPickerFormat"
+  (select)="monthOnSelect($event)" [month]="monthOpt">
+</ion-range-calendar-month-picker>
+
+}

@@ -1,13 +1,14 @@
 import { ComponentFixture, fakeAsync, flush, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { FormsModule } from '@angular/forms';
+
 import { IonicModule, ModalController } from '@ionic/angular';
 
 import { IonRangeCalendarModule } from 'projects/ion-range-calendar/src/public-api';
 
 import { AppComponent } from './app.component';
 
-import moment from 'moment-timezone';
-import { FormsModule } from '@angular/forms';
+import { format } from 'date-fns';
 
 describe('AppComponent', () => {
   let fixture: ComponentFixture<AppComponent>;
@@ -51,7 +52,7 @@ describe('AppComponent', () => {
 
   it('should create the modal', fakeAsync(() => {
     app.onClick();
-    app.onChange(moment().format());
+    app.onChange(format(Date.now(), 'yyyy-MM-ddTHH:mm:ssXXX'));
     flush();
     expect(modalCtrlSpy.create).toHaveBeenCalled();
     expect(modalSpy.present).toHaveBeenCalled();

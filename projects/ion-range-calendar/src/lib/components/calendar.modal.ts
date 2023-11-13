@@ -10,9 +10,12 @@ import {
   HostBinding,
 } from '@angular/core';
 import { NavParams, ModalController, IonContent } from '@ionic/angular';
-import { CalendarDay, CalendarMonth, CalendarModalOptions } from '../calendar.model';
+
+import { CalendarDay, CalendarMonth, CalendarModalOptions, DefaultDate } from '../calendar.model';
+
 import { IonRangeCalendarService } from '../services/ion-range-calendar.service';
-import moment from 'moment-timezone';
+
+import { addMonths, differenceInMonths, format, isAfter, startOfDay, subMonths } from 'date-fns';
 
 const NUM_OF_MONTHS_TO_CREATE = 3;
 
@@ -68,7 +71,7 @@ export class CalendarModal implements OnInit, AfterViewInit {
     }
 
     this.calendarMonths = this.calSvc.createMonthsByPeriod(
-      moment(this._d.from).valueOf(),
+      new Date(this._d.from).valueOf(),
       this.findInitMonthNumber(this._d.defaultScrollTo) + this.step,
       this._d
     );
@@ -166,12 +169,10 @@ export class CalendarModal implements OnInit, AfterViewInit {
   nextMonth(event: any): void {
     const len = this.calendarMonths.length;
     const final = this.calendarMonths[len - 1];
-    const nextTime = moment(final.original.time)
-      .add(1, 'M')
-      .valueOf();
-    const rangeEnd = this._d.to ? moment(this._d.to).subtract(1, 'M') : 0;
+    const nextTime = addMonths(final.original.time, 1).valueOf();
+    const rangeEnd = this._d.to ? subMonths(this._d.to, 1) : 0;
 
-    if (len <= 0 || (rangeEnd !== 0 && moment(final.original.time).isAfter(rangeEnd))) {
+    if (len <= 0 || (rangeEnd !== 0 && isAfter(final.original.time, rangeEnd))) {
       event.target.disabled = true;
       return;
     }
@@ -189,9 +190,7 @@ export class CalendarModal implements OnInit, AfterViewInit {
       return;
     }
 
-    const firstTime = (this.actualFirstTime = moment(first.original.time)
-      .subtract(NUM_OF_MONTHS_TO_CREATE, 'M')
-      .valueOf());
+    const firstTime = (this.actualFirstTime = subMonths(first.original.time, NUM_OF_MONTHS_TO_CREATE).valueOf());
 
     this.calendarMonths.unshift(...this.calSvc.createMonthsByPeriod(firstTime, NUM_OF_MONTHS_TO_CREATE, this._d));
     this.ref.detectChanges();
@@ -254,27 +253,27 @@ export class CalendarModal implements OnInit, AfterViewInit {
   }
 
   findInitMonthNumber(date: Date): number {
-    let startDate = this.actualFirstTime ? moment(this.actualFirstTime) : moment(this._d.from);
-    const defaultScrollTo = moment(date);
-    const isAfter: boolean = defaultScrollTo.isAfter(startDate);
-    if (!isAfter) return -1;
+    let startDate = this.actualFirstTime ? new Date(this.actualFirstTime) : new Date(this._d.from);
+    const defaultScrollTo = new Date(date);
+    const after: boolean = isAfter(defaultScrollTo, startDate);
+    if (!after) return -1;
 
     if (this.showYearPicker) {
-      startDate = moment(new Date(this.year, 0, 1));
+      startDate = new Date(this.year, 0, 1);
     }
 
-    return defaultScrollTo.diff(startDate, 'month');
+    return differenceInMonths(defaultScrollTo, startDate);
   }
 
-  _getDayTime(date: any): number {
-    return moment(moment(date).format('YYYY-MM-DD')).valueOf();
+  _getDayTime(date: DefaultDate): number {
+    return startOfDay(new Date(date)).valueOf();
   }
 
-  _monthFormat(date: any): string {
-    return moment(date).format(this._d.monthFormat.replace(/y/g, 'Y'));
+  _monthFormat(date: DefaultDate): string {
+    return format(new Date(date), this._d.monthFormat);
   }
 
-  trackByIndex(index: number, momentDate: CalendarMonth): number {
-    return momentDate.original ? momentDate.original.time : index;
+  trackByIndex(index: number, month: CalendarMonth): number {
+    return month.original ? month.original.time : index;
   }
 }

@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 
-import { CalendarComponentPayloadTypes, CalendarModal, CalendarModalOptions } from 'projects/ion-range-calendar/src/public-api';
+import { startOfDay, subDays } from 'date-fns';
 
-import moment from 'moment-timezone';
+import { CalendarChange } from 'projects/ion-range-calendar/src/lib/components/ion-range-calendar.component';
+
+import { CalendarModal, CalendarModalOptions } from 'projects/ion-range-calendar/src/public-api';
 
 @Component({
   selector: 'app-root',
@@ -12,22 +14,22 @@ import moment from 'moment-timezone';
 })
 export class AppComponent {
 
-  public date = moment();
+  public date = new Date();
 
-  private from: moment.Moment = moment().startOf('day').subtract(6, 'days');
-  private to: moment.Moment = moment().startOf('day');
+  private from: Date = subDays(startOfDay(Date.now()), 6);
+  private to: Date = startOfDay(Date.now());
 
   private options: CalendarModalOptions = {
     pickMode: 'range',
     title: 'Select Date Range',
     cssClass: 'calendar',
     canBackwardsSelected: true,
-    to: this.to.toDate(),
-    defaultDateRange: { to: this.to.toDate(), from: this.from.toDate() },
+    to: this.to,
+    defaultDateRange: { to: this.to, from: this.from },
     doneIcon: true,
     clearIcon: true,
     closeIcon: true,
-    defaultScrollTo: this.from.toDate(),
+    defaultScrollTo: this.from,
     maxRange: 28,
   };
 
@@ -46,7 +48,7 @@ export class AppComponent {
     console.log(data);
   }
 
-  public onChange(event: CalendarComponentPayloadTypes) {
+  public onChange(event: CalendarChange) {
     console.log(event);
   }
 

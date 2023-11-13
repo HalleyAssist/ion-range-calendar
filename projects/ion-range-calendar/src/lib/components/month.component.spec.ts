@@ -1,11 +1,13 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { FormsModule } from "@angular/forms";
-import { IonicModule } from "@ionic/angular";
-import moment from "moment";
-import { CalendarDay, CalendarModalOptions, CalendarMonth } from "../calendar.model";
-import { IonRangeCalendarService } from "../services/ion-range-calendar.service";
-import { MonthComponent } from "./month.component";
 
+import { IonicModule } from "@ionic/angular";
+
+import { addDays, parse, startOfDay, subDays } from "date-fns";
+
+import { CalendarDay, CalendarModalOptions, CalendarMonth } from "../calendar.model";
+
+import { MonthComponent } from "./month.component";
 
 describe('MonthComponent', () => {
   let component: MonthComponent;
@@ -13,19 +15,20 @@ describe('MonthComponent', () => {
 
   let month: CalendarMonth;
 
-  const now = moment('2022-04-15');
-  const from = now.clone().startOf('day').subtract(6, 'days');
-  const to = now.clone().startOf('day')
+  const now = parse('2022-04-15', 'yyyy-MM-dd', new Date());
+  const from = subDays(startOfDay(now), 6);
+  const to = startOfDay(now);
+
   let opts: CalendarModalOptions = {
     pickMode: 'range',
     title: 'Select Date Range',
     cssClass: 'calendar',
     canBackwardsSelected: true,
-    to: to.toDate(),
+    to: to,
     doneIcon: true,
     clearIcon: true,
     closeIcon: true,
-    defaultScrollTo: from.toDate(),
+    defaultScrollTo: from,
     maxRange: 28,
   };
 
@@ -43,7 +46,6 @@ describe('MonthComponent', () => {
   };
 
   beforeEach(async () => {
-
     await TestBed.configureTestingModule({
       declarations: [
         MonthComponent,
@@ -59,7 +61,7 @@ describe('MonthComponent', () => {
     //  set service opts.
     component.service.safeOpt(opts);
     //  create month
-    month = component.service.createMonthsByPeriod(+moment('2022-04-01'), 1, opts)[0];
+    month = component.service.createMonthsByPeriod(new Date('2022-04-01').valueOf(), 1, opts)[0];
     //  set required component inputs
     component.month = month;
     component.pickMode = 'range';
@@ -92,32 +94,32 @@ describe('MonthComponent', () => {
 
       // increase start
       const newStart = Object.assign({}, start);
-      newStart.time = +moment(start.time).subtract(2, 'days');
+      newStart.time = +subDays(start.time, 2);
       component.onSelected(newStart);
       expect(component.value).toEqual([newStart, end]);
 
       // increase end
       const newEnd = Object.assign({}, end);
-      newEnd.time = +moment(end.time).add(2, 'days');
+      newEnd.time = +addDays(end.time, 2);
       component.onSelected(newEnd);
       expect(component.value).toEqual([newStart, newEnd]);
     });
 
     it('should shift the range', () => {
-      //  set inital range to end before to
+      //  set initial range to end before to
       const newStart = Object.assign({}, start);
-      newStart.time = +moment(newStart.time).subtract(4, 'days');
+      newStart.time = +subDays(newStart.time, 4);
       component.onSelected(newStart);
       const newEnd = Object.assign({}, end);
-      newEnd.time = +moment(newEnd.time).subtract(4, 'days');
+      newEnd.time = +subDays(newEnd.time, 4);
       component.onSelected(newEnd);
       expect(component.value).toEqual([newStart, newEnd]);
       //  select day between range
       const day = Object.assign({}, newStart);
-      day.time = +moment(newStart.time).add(2, 'days');
+      day.time = +addDays(newStart.time, 2);
       //  expect end to be shifted
       const expectedEnd = Object.assign({}, end);
-      expectedEnd.time = +moment(newEnd.time).add(2, 'days');
+      expectedEnd.time = +addDays(newEnd.time, 2);
       component.onSelected(day);
       expect(component.value).toEqual([day, expectedEnd]);
     });
@@ -128,7 +130,7 @@ describe('MonthComponent', () => {
       expect(component.value).toEqual([start, end]);
       //  select day between range
       const day = Object.assign({}, start);
-      day.time = +moment(start.time).add(2, 'days');
+      day.time = +addDays(start.time, 2);
       component.onSelected(day);
       expect(component.value).toEqual([day, end]);
     });
@@ -139,19 +141,19 @@ describe('MonthComponent', () => {
       expect(component.value).toEqual([start, end]);
       //  set range to max range
       const newStart = Object.assign({}, start);
-      newStart.time = +moment(newStart.time).subtract(45, 'days');
+      newStart.time = +subDays(newStart.time, 45);
       component.onSelected(newStart);
       //  expect end to be start plus max range
       const expectedEnd = Object.assign({}, end);
-      expectedEnd.time = +moment(newStart.time).add(27, 'days');
+      expectedEnd.time = +addDays(newStart.time, 27);
       expect(component.value).toEqual([newStart, expectedEnd]);
       //  shift range by end
       const newEnd = Object.assign({}, expectedEnd);
-      newEnd.time = +moment(expectedEnd.time).add(14, 'days');
+      newEnd.time = +addDays(expectedEnd.time, 14);
       component.onSelected(newEnd);
       //  expect start to be end minus max range
       const expectedStart = Object.assign({}, newEnd);
-      expectedStart.time = +moment(newEnd.time).subtract(27, 'days');
+      expectedStart.time = +subDays(newEnd.time, 27);
       expect(component.value).toEqual([expectedStart, newEnd]);
     });
 

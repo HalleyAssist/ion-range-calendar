@@ -1,5 +1,6 @@
 import { Inject, Injectable, Optional } from '@angular/core';
-import moment from 'moment-timezone';
+
+import { addDays, addMonths, format, getDaysInMonth, isAfter, isBefore, isToday, isWithinInterval, subDays } from 'date-fns';
 
 import {
   CalendarOriginal,
@@ -9,7 +10,9 @@ import {
   CalendarResult,
   DayConfig,
 } from '../calendar.model';
+
 import { defaults } from '../config';
+
 import { DEFAULT_CALENDAR_OPTIONS } from './calendar-options.provider';
 
 @Injectable({ providedIn: 'root' })
@@ -47,7 +50,7 @@ export class IonRangeCalendarService {
       doneTitle = '',
       clearLabel = 'CLEAR',
       clearTitle = '',
-      monthFormat = 'MMM YYYY',
+      monthFormat = 'MMM yyyy',
       title = 'CALENDAR',
       defaultTitle = '',
       defaultSubtitle = '',
@@ -111,7 +114,8 @@ export class IonRangeCalendarService {
     const year = date.getFullYear();
     const month = date.getMonth();
     const firstWeek = new Date(year, month, 1).getDay();
-    const howManyDays = moment(time).daysInMonth();
+    //  get the number of days in the month of the provided time
+    const howManyDays = getDaysInMonth(date);
     return {
       year,
       month,
@@ -128,24 +132,24 @@ export class IonRangeCalendarService {
   }
 
   createCalendarDay(time: number, opt: CalendarModalOptions, month?: number): CalendarDay {
-    const _time = moment(time);
-    const date = moment(time);
-    const isToday = moment().isSame(_time, 'days');
+    const _time = new Date(time);
+    const date = new Date(time);
+    const today = isToday(date);
     const dayConfig = this.findDayConfig(_time, opt);
-    const _rangeBeg = moment(opt.from).valueOf();
-    const _rangeEnd = moment(opt.to).valueOf();
+    const _rangeBeg = new Date(opt.from).valueOf();
+    const _rangeEnd = new Date(opt.to).valueOf();
     let isBetween = true;
-    const disableWeeks = opt.disableWeeks && opt.disableWeeks.indexOf(_time.toDate().getDay()) !== -1;
+    const disableWeeks = opt.disableWeeks && opt.disableWeeks.indexOf(_time.getDay()) !== -1;
     if (_rangeBeg > 0 && _rangeEnd > 0) {
       if (!opt.canBackwardsSelected) {
-        isBetween = !_time.isBetween(_rangeBeg, _rangeEnd, 'days', '[]');
+        isBetween = !isWithinInterval(_time, { start: _rangeBeg, end: _rangeEnd, });
       } else {
-        isBetween = moment(_time).isBefore(_rangeBeg) ? false : isBetween;
+        isBetween = isBefore(_time, _rangeBeg) ? false : isBetween;
       }
     } else if (_rangeBeg > 0 && _rangeEnd === 0) {
       if (!opt.canBackwardsSelected) {
-        const _addTime = _time.add(1, 'day');
-        isBetween = !_addTime.isAfter(_rangeBeg);
+        const _addTime = addDays(_time, 1);
+        isBetween = !isAfter(_addTime, _rangeBeg);
       } else {
         isBetween = false;
       }
@@ -174,16 +178,16 @@ export class IonRangeCalendarService {
 
     return {
       time,
-      isToday,
+      isToday: today,
       title,
       subTitle,
-      isLastMonth: typeof month === 'number' ? date.month() < month : false,
-      isNextMonth: typeof month === 'number' ? date.month() > month : false,
+      isLastMonth: typeof month === 'number' ? date.getMonth() < month : false,
+      isNextMonth: typeof month === 'number' ? date.getMonth() > month : false,
       marked: dayConfig ? dayConfig.marked || false : false,
       cssClass: dayConfig ? dayConfig.cssClass || '' : '',
       disable: _disable,
-      isFirst: date.date() === 1,
-      isLast: date.date() === date.daysInMonth(),
+      isFirst: date.getDate() === 1,
+      isLast: date.getDate() === getDaysInMonth(date),
     };
   }
 
@@ -207,21 +211,17 @@ export class IonRangeCalendarService {
 
     if (opt.showAdjacentMonthDay) {
       const _booleanMap = days.map(e => !!e);
-      const thisMonth = moment(original.time).month();
+      const thisMonth = new Date(original.time).getMonth();
       let startOffsetIndex = _booleanMap.indexOf(true) - 1;
       let endOffsetIndex = _booleanMap.lastIndexOf(true) + 1;
       for (startOffsetIndex; startOffsetIndex >= 0; startOffsetIndex--) {
-        const dayBefore = moment(days[startOffsetIndex + 1].time)
-          .clone()
-          .subtract(1, 'd');
+        const dayBefore = subDays(days[startOffsetIndex + 1].time, 1);
         days[startOffsetIndex] = this.createCalendarDay(dayBefore.valueOf(), opt, thisMonth);
       }
 
       if (!(_booleanMap.length % 7 === 0 && _booleanMap[_booleanMap.length - 1])) {
         for (endOffsetIndex; endOffsetIndex < days.length + (endOffsetIndex % 7); endOffsetIndex++) {
-          const dayAfter = moment(days[endOffsetIndex - 1].time)
-            .clone()
-            .add(1, 'd');
+          const dayAfter = addDays(days[endOffsetIndex - 1].time, 1);
           days[endOffsetIndex] = this.createCalendarDay(dayAfter.valueOf(), opt, thisMonth);
         }
       }
@@ -240,9 +240,7 @@ export class IonRangeCalendarService {
     const _startMonth = new Date(_start.getFullYear(), _start.getMonth(), 1).getTime();
 
     for (let i = 0; i < monthsNum; i++) {
-      const time = moment(_startMonth)
-        .add(i, 'M')
-        .valueOf();
+      const time = addMonths(_startMonth, i).valueOf();
       const originalCalendar = this.createOriginalCalendar(time);
       _array.push(this.createCalendarMonth(originalCalendar, opt));
     }
@@ -272,15 +270,15 @@ export class IonRangeCalendarService {
   }
 
   multiFormat(time: number): CalendarResult {
-    const _moment = moment(time);
+    const _date = new Date(time);
     return {
-      time: _moment.valueOf(),
-      unix: _moment.unix(),
-      dateObj: _moment.toDate(),
-      string: _moment.format(defaults.DATE_FORMAT),
-      years: _moment.year(),
-      months: _moment.month() + 1,
-      date: _moment.date(),
+      time: _date.valueOf(),
+      unix: Math.floor(_date.valueOf() / 1000),
+      dateObj: _date,
+      string: format(_date, defaults.DATE_FORMAT),
+      years: _date.getFullYear(),
+      months: _date.getMonth() + 1,
+      date: _date.getDate(),
     };
   }
 }

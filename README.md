@@ -3,7 +3,7 @@
 [![NPM version][npm-image]][npm-url]
 [![MIT License][license-image]][license-url]
 
-Forked from : https://github.com/hsuanxyz/ion-range-calendar
+Forked from : <https://github.com/hsuanxyz/ion-range-calendar>
 
 * Supports date range.
 * Supports multi date.
@@ -12,9 +12,12 @@ Forked from : https://github.com/hsuanxyz/ion-range-calendar
 * Setting days event.
 * Setting localization.
 * Material design.
-# Supports
+
+## Supports
+
 * `"@ionic/angular": ">=4.0.0"`
-# Usage
+
+## Usage
 
 ### Installation
 
@@ -77,12 +80,12 @@ import { IonRangeCalendarModule } from "ion-range-calendar";
 export class AppModule {}
 ```
 
-# As Component
+## As Component
 
 ### Basic
 
 ```html
-<ion-range-calendar [(ngModel)]="date" (change)="onChange($event)" [type]="type" [format]="'YYYY-MM-DD'">
+<ion-range-calendar [(ngModel)]="date" (change)="onChange($event)" [type]="type" [format]="'yyyy-MM-dd'">
 </ion-range-calendar>
 ```
 
@@ -95,7 +98,7 @@ import { Component } from '@angular/core';
 })
 export class HomePage {
   date: string;
-  type: 'string'; // 'string' | 'js-date' | 'moment' | 'time' | 'object'
+  type: 'string'; // 'string' | 'js-date' | 'time' | 'object'
   constructor() { }
 
   onChange($event) {
@@ -108,7 +111,7 @@ export class HomePage {
 ### Date range
 
 ```html
-<ion-range-calendar [(ngModel)]="dateRange" [options]="optionsRange" [type]="type" [format]="'YYYY-MM-DD'">
+<ion-range-calendar [(ngModel)]="dateRange" [options]="optionsRange" [type]="type" [format]="'yyyy-MM-dd'">
 </ion-range-calendar>
 ```
 
@@ -122,7 +125,7 @@ import { CalendarComponentOptions } from '@googlproxer/ion-range-calendar';
 })
 export class HomePage {
   dateRange: { from: string; to: string; };
-  type: 'string'; // 'string' | 'js-date' | 'moment' | 'time' | 'object'
+  type: 'string'; // 'string' | 'js-date' | 'time' | 'object'
   optionsRange: CalendarComponentOptions = {
     pickMode: 'range'
   };
@@ -135,7 +138,7 @@ export class HomePage {
 ### Multi Date
 
 ```html
-<ion-range-calendar [(ngModel)]="dateMulti" [options]="optionsMulti" [type]="type" [format]="'YYYY-MM-DD'">
+<ion-range-calendar [(ngModel)]="dateMulti" [options]="optionsMulti" [type]="type" [format]="'yyyy-MM-dd'">
 </ion-range-calendar>
 ```
 
@@ -149,7 +152,7 @@ import { CalendarComponentOptions } from '@googlproxer/ion-range-calendar';
 })
 export class HomePage {
   dateMulti: string[];
-  type: 'string'; // 'string' | 'js-date' | 'moment' | 'time' | 'object'
+  type: 'string'; // 'string' | 'js-date' | 'time' | 'object'
   optionsMulti: CalendarComponentOptions = {
     pickMode: 'multi'
   };
@@ -161,46 +164,46 @@ export class HomePage {
 
 ### Input Properties
 
-| Name     | Type                     | Default      | Description  |
-| -------- | ------------------------ | ------------ | ------------ |
-| options  | CalendarComponentOptions | null         | options      |
-| format   | string                   | 'YYYY-MM-DD' | value format |
-| type     | string                   | 'string'     | value type   |
-| readonly | boolean                  | false        | readonly     |
+| Name     | Type                       | Default      | Description  |
+| -------- | -------------------------- | ------------ | ------------ |
+| options  | `CalendarComponentOptions` | null         | options      |
+| format   | `string`                   | 'yyyy-MM-dd' | value format |
+| type     | `string`                   | 'string'     | value type   |
+| readonly | `boolean`                  | false        | readonly     |
 
 ### Output Properties
 
-| Name        | Type         | Description                |
-| ----------- | ------------ | -------------------------- |
-| change      | EventEmitter | event for model change     |
-| monthChange | EventEmitter | event for month change     |
-| select      | EventEmitter | event for day select       |
-| selectStart | EventEmitter | event for day select       |
-| selectEnd   | EventEmitter | event for day select       |
+| Name        | Type           | Description                |
+| ----------- | -------------- | -------------------------- |
+| change      | `EventEmitter` | event for model change     |
+| monthChange | `EventEmitter` | event for month change     |
+| select      | `EventEmitter` | event for day select       |
+| selectStart | `EventEmitter` | event for day select       |
+| selectEnd   | `EventEmitter` | event for day select       |
 
 ### CalendarComponentOptions
 
-| Name              | Type                    | Default                                                                                | Description                                       |
-| ----------------- | ----------------------- | -------------------------------------------------------------------------------------- | ------------------------------------------------- |
-| from              | Date                    | `new Date()`                                                                           | start date                                        |
-| to                | Date                    | 0 (Infinite)                                                                           | end date                                          |
-| color             | string                  | `'primary'`                                                                            | 'primary', 'secondary', 'danger', 'light', 'dark' |
-| pickMode          | string                  | `single`                                                                               | 'multi', 'range', 'single'                        |
-| showToggleButtons | boolean                 | `true`                                                                                 | show toggle buttons                               |
-| showMonthPicker   | boolean                 | `true`                                                                                 | show month picker                                 |
-| monthPickerFormat | Array<string>           | `['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC']` | month picker format                               |
-| defaultTitle      | string                  | ''                                                                                     | default title in days                             |
-| defaultSubtitle   | string                  | ''                                                                                     | default subtitle in days                          |
-| disableWeeks      | Array<number>           | `[]`                                                                                   | week to be disabled (0-6)                         |
-| monthFormat       | string                  | `'MMM YYYY'`                                                                           | month title format                                |
-| weekdays          | Array<string>           | `['S', 'M', 'T', 'W', 'T', 'F', 'S']`                                                  | weeks text                                        |
-| weekStart         | number                  | `0` (0 or 1)                                                                           | set week start day                                |
-| daysConfig        | Array<**_DaysConfig_**> | `[]`                                                                                   | days configuration                                |
-| maxRange          | number                  | 0                                                                                      | The maximum range of the selection in days        |
+| Name              | Type                      | Default                                                                                | Description                                       |
+| ----------------- | ------------------------- | -------------------------------------------------------------------------------------- | ------------------------------------------------- |
+| from              | `Date`                    | `new Date()`                                                                           | start date                                        |
+| to                | `Date`                    | 0 (Infinite)                                                                           | end date                                          |
+| color             | `string`                  | `'primary'`                                                                            | 'primary', 'secondary', 'danger', 'light', 'dark' |
+| pickMode          | `string`                  | `single`                                                                               | 'multi', 'range', 'single'                        |
+| showToggleButtons | `boolean`                 | `true`                                                                                 | show toggle buttons                               |
+| showMonthPicker   | `boolean`                 | `true`                                                                                 | show month picker                                 |
+| monthPickerFormat | `Array<string>`           | `['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC']` | month picker format                               |
+| defaultTitle      | `string`                  | ''                                                                                     | default title in days                             |
+| defaultSubtitle   | `string`                  | ''                                                                                     | default subtitle in days                          |
+| disableWeeks      | `Array<number>`           | `[]`                                                                                   | week to be disabled (0-6)                         |
+| monthFormat       | `string`                  | `'MMM yyyy'`                                                                           | month title format                                |
+| weekdays          | `Array<string>`           | `['S', 'M', 'T', 'W', 'T', 'F', 'S']`                                                  | weeks text                                        |
+| weekStart         | `number`                  | `0` (0 or 1)                                                                           | set week start day                                |
+| daysConfig        | `Array<DaysConfig>`       | `[]`                                                                                   | days configuration                                |
+| maxRange          | `number`                  | 0                                                                                      | The maximum range of the selection in days        |
 
-# As Modal
+## As Modal
 
-### Basic
+### Basic Modal
 
 Import ion-range-calendar in component controller.
 
@@ -240,7 +243,7 @@ export class HomePage {
 }
 ```
 
-### Date range
+### Date range Modal
 
 Set pickMode to 'range'.
 
@@ -267,7 +270,7 @@ openCalendar() {
 }
 ```
 
-### Multi Date
+### Multi Date Modal
 
 Set pickMode to 'multi'.
 
@@ -333,7 +336,7 @@ import { NgModule, LOCALE_ID } from '@angular/core';
 ```typescript
 openCalendar() {
   const options: CalendarModalOptions = {
-    monthFormat: 'YYYY 年 MM 月 ',
+    monthFormat: 'yyyy 年 MM 月 ',
     weekdays: ['天', '一', '二', '三', '四', '五', '六'],
     weekStart: 1,
     defaultDate: new Date()
@@ -385,46 +388,46 @@ openCalendar() {
 }
 ```
 
-# API
+## API
 
 ### Modal Options
 
-| Name                      | Type                     | Default                               | Description                                                |
-| ------------------------- | ------------------------ | ------------------------------------- | ---------------------------------------------------------- |
-| from                      | Date                     | `new Date()`                          | start date                                                 |
-| to                        | Date                     | 0 (Infinite)                          | end date                                                   |
-| title                     | string                   | `'CALENDAR'`                          | title                                                      |
-| color                     | string                   | `'primary'`                           | 'primary', 'secondary', 'danger', 'light', 'dark'          |
-| defaultScrollTo           | Date                     | none                                  | let the view scroll to the default date                    |
-| defaultDate               | Date                     | none                                  | default date data, apply to single                         |
-| defaultDates              | Array<Date>              | none                                  | default dates data, apply to multi                         |
-| defaultDateRange          | { from: Date, to: Date } | none                                  | default date-range data, apply to range                    |
-| defaultTitle              | string                   | ''                                    | default title in days                                      |
-| defaultSubtitle           | string                   | ''                                    | default subtitle in days                                   |
-| cssClass                  | string                   | `''`                                  | Additional classes for custom styles, separated by spaces. |
-| canBackwardsSelected      | boolean                  | `false`                               | can backwards selected                                     |
-| pickMode                  | string                   | `single`                              | 'multi', 'range', 'single'                                 |
-| disableWeeks              | Array<number>            | `[]`                                  | week to be disabled (0-6)                                  |
-| closeLabel                | string                   | `CANCEL`                              | cancel button label                                        |
-| doneLabel                 | string                   | `DONE`                                | done button label                                          |
-| clearLabel                | string                   |  null                                 | clear button label                                         |
-| closeIcon                 | boolean                  | `false`                               | show cancel button icon                                    |
-| doneIcon                  | boolean                  | `false`                               | show done button icon                                      |
-| monthFormat               | string                   | `'MMM YYYY'`                          | month title format                                         |
-| weekdays                  | Array<string>            | `['S', 'M', 'T', 'W', 'T', 'F', 'S']` | weeks text                                                 |
-| weekStart                 | number                   | `0` (0 or 1)                          | set week start day                                         |
-| daysConfig                | Array<**_DaysConfig_**>  | `[]`                                  | days configuration                                         |
-| step                      | number                   | `12`                                  | month load stepping interval to when scroll                |
-| defaultEndDateToStartDate | boolean                  | `false`                               | makes the end date optional, will default it to the start  |
-| maxRange                  | number                   | 0                                     | The maximum range of the selection in days                 |
+| Name                      | Type                       | Default                               | Description                                                |
+| ------------------------- | -------------------------- | ------------------------------------- | ---------------------------------------------------------- |
+| from                      | `Date`                     | `new Date()`                          | start date                                                 |
+| to                        | `Date`                     | 0 (Infinite)                          | end date                                                   |
+| title                     | `string`                   | `'CALENDAR'`                          | title                                                      |
+| color                     | `string`                   | `'primary'`                           | 'primary', 'secondary', 'danger', 'light', 'dark'          |
+| defaultScrollTo           | `Date`                     | none                                  | let the view scroll to the default date                    |
+| defaultDate               | `Date`                     | none                                  | default date data, apply to single                         |
+| defaultDates              | `Array<Date>`              | none                                  | default dates data, apply to multi                         |
+| defaultDateRange          | `{ from: Date, to: Date }` | none                                  | default date-range data, apply to range                    |
+| defaultTitle              | `string`                   | ''                                    | default title in days                                      |
+| defaultSubtitle           | `string`                   | ''                                    | default subtitle in days                                   |
+| cssClass                  | `string`                   | `''`                                  | Additional classes for custom styles, separated by spaces. |
+| canBackwardsSelected      | `boolean`                  | `false`                               | can backwards selected                                     |
+| pickMode                  | `string`                   | `single`                              | 'multi', 'range', 'single'                                 |
+| disableWeeks              | `Array<number>`            | `[]`                                  | week to be disabled (0-6)                                  |
+| closeLabel                | `string`                   | `CANCEL`                              | cancel button label                                        |
+| doneLabel                 | `string`                   | `DONE`                                | done button label                                          |
+| clearLabel                | `string`                   |  null                                 | clear button label                                         |
+| closeIcon                 | `boolean`                  | `false`                               | show cancel button icon                                    |
+| doneIcon                  | `boolean`                  | `false`                               | show done button icon                                      |
+| monthFormat               | `string`                   | `'MMM yyyy'`                          | month title format                                         |
+| weekdays                  | `Array<string>`            | `['S', 'M', 'T', 'W', 'T', 'F', 'S']` | weeks text                                                 |
+| weekStart                 | `number`                   | `0` (0 or 1)                          | set week start day                                         |
+| daysConfig                | `Array<DaysConfig>`        | `[]`                                  | days configuration                                         |
+| step                      | `number`                   | `12`                                  | month load stepping interval to when scroll                |
+| defaultEndDateToStartDate | `boolean`                  | `false`                               | makes the end date optional, will default it to the start  |
+| maxRange                  | `number`                   | 0                                     | The maximum range of the selection in days                 |
 
 ### onDidDismiss Output `{ data } = event`
 
 | pickMode | Type                                                     |
 | -------- | -------------------------------------------------------- |
-| single   | { date: **_CalendarResult_** }                           |
-| range    | { from: **_CalendarResult_**, to: **_CalendarResult_** } |
-| multi    | Array<**_CalendarResult_**>                              |
+| single   | `{ date: CalendarResult }`                               |
+| range    | `{ from: CalendarResult, to: CalendarResult }`           |
+| multi    | `Array<CalendarResult>`                                  |
 
 ### onDidDismiss Output `{ role } = event`
 
@@ -436,26 +439,26 @@ openCalendar() {
 
 #### DaysConfig
 
-| Name     | Type    | Default  | Description                           |
-| -------- | ------- | -------- | ------------------------------------- |
-| cssClass | string  | `''`     | separated by spaces                   |
-| date     | Date    | required | configured days                       |
-| marked   | boolean | false    | highlight color                       |
-| disable  | boolean | false    | disable                               |
-| title    | string  | none     | displayed title eg: `'today'`         |
-| subTitle | string  | none     | subTitle subTitle eg: `'New Year\'s'` |
+| Name     | Type      | Default  | Description                           |
+| -------- | --------- | -------- | ------------------------------------- |
+| cssClass | `string`  | `''`     | separated by spaces                   |
+| date     | `Date`    | required | configured days                       |
+| marked   | `boolean` | false    | highlight color                       |
+| disable  | `boolean` | false    | disable                               |
+| title    | `string`  | none     | displayed title eg: `'today'`         |
+| subTitle | `string`  | none     | subTitle subTitle eg: `'New Year\'s'` |
 
 ### CalendarResult
 
-| Name    | Type   |
-| ------- | ------ |
-| time    | number |
-| unix    | number |
-| dateObj | Date   |
-| string  | string |
-| years   | number |
-| months  | number |
-| date    | number |
+| Name    | Type     |
+| ------- | -------- |
+| time    | `number` |
+| unix    | `number` |
+| dateObj | `Date`   |
+| string  | `string` |
+| years   | `number` |
+| months  | `number` |
+| date    | `number` |
 
 [npm-image]: https://img.shields.io/npm/v/@googlproxer/ion-range-calendar.svg
 [npm-url]: https://www.npmjs.com/package/@googlproxer/ion-range-calendar

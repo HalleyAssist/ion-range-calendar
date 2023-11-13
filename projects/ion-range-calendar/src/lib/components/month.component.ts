@@ -1,9 +1,12 @@
 import { Component, ChangeDetectorRef, Input, Output, EventEmitter, forwardRef, AfterViewInit } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+
 import { IonRangeCalendarService } from '../services/ion-range-calendar.service';
+
 import { CalendarDay, CalendarMonth, PickMode } from '../calendar.model';
+
 import { defaults } from '../config';
-import moment from 'moment-timezone';
+import { addDays, isAfter, startOfDay, subDays } from 'date-fns';
 
 export const MONTH_VALUE_ACCESSOR: any = {
   provide: NG_VALUE_ACCESSOR,
@@ -175,9 +178,9 @@ export class MonthComponent implements ControlValueAccessor, AfterViewInit {
         const range = (this._date[1].time - this._date[0].time) / 86400000;
         this._date[0] = Object.assign({}, item);
         this.selectStart.emit(this._date[0]);
-        let end = moment(this._date[0].time).add(range, 'days');
+        let end = addDays(this._date[0].time, range);
         //  if end is after service.opts.to, set end to service.opts.to
-        if (end.isAfter(this.service.opts.to)) end = moment(this.service.opts.to).startOf('day');
+        if (isAfter(end, this.service.opts.to)) end = startOfDay(this.service.opts.to);
         this._date[1].time = +end;
         this.selectEnd.emit(this._date[1]);
       }
@@ -202,7 +205,7 @@ export class MonthComponent implements ControlValueAccessor, AfterViewInit {
   // if max range and end minus max range is greater than start, set start to end minus max range
   private adjustStart(maxRange: number) {
     if (maxRange > 0 && this._date[1].time - maxRange > this._date[0].time) {
-      this._date[0].time = +moment(this._date[1].time).subtract(this.service.opts.maxRange - 1, 'days');
+      this._date[0].time = +subDays(this._date[1].time, this.service.opts.maxRange - 1);
       this.selectStart.emit(this._date[0]);
     }
   }
@@ -210,7 +213,7 @@ export class MonthComponent implements ControlValueAccessor, AfterViewInit {
   //  if max range and start plus max range is less than end, set end to start plus max range
   private adjustEnd(maxRange: number) {
     if (maxRange > 0 && this._date[0].time + maxRange < this._date[1].time) {
-      this._date[1].time = +moment(this._date[0].time).add(this.service.opts.maxRange - 1, 'days');
+      this._date[1].time = +addDays(this._date[0].time, this.service.opts.maxRange - 1);
       this.selectEnd.emit(this._date[1]);
     }
   }

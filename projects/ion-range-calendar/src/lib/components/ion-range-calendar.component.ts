@@ -1,6 +1,8 @@
 import { Component, EventEmitter, forwardRef, Input, OnInit, Output, Provider } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
+import { addMonths, addYears, format, parse, subMonths, subYears } from 'date-fns';
+
 import {
   CalendarComponentMonthChange,
   CalendarComponentOptions,
@@ -15,8 +17,6 @@ import { defaults } from '../config';
 
 import { IonRangeCalendarService } from '../services/ion-range-calendar.service';
 
-import moment from 'moment-timezone';
-
 export const ION_CAL_VALUE_ACCESSOR: Provider = {
   provide: NG_VALUE_ACCESSOR,
   useExisting: forwardRef(() => IonRangeCalendarComponent),
@@ -29,6 +29,11 @@ interface CompatibleIcons {
   chevronBack: string;
   chevronForward: string;
 }
+
+export type CalendarChange =
+  | CalendarComponentPayloadTypes
+  | { from: CalendarComponentPayloadTypes, to: CalendarComponentPayloadTypes }
+  | CalendarComponentPayloadTypes[];
 
 @Component({
   selector: 'ion-range-calendar',
@@ -66,7 +71,7 @@ export class IonRangeCalendarComponent implements ControlValueAccessor, OnInit {
   @Input() format: string = defaults.DATE_FORMAT;
   @Input() type: CalendarComponentTypeProperty = 'string';
   @Input() readonly = false;
-  @Output() change: EventEmitter<CalendarComponentPayloadTypes> = new EventEmitter();
+  @Output() change: EventEmitter<CalendarChange> = new EventEmitter();
   @Output() monthChange: EventEmitter<CalendarComponentMonthChange> = new EventEmitter();
   @Output() select: EventEmitter<CalendarDay> = new EventEmitter();
   @Output() selectStart: EventEmitter<CalendarDay> = new EventEmitter();
@@ -136,24 +141,18 @@ export class IonRangeCalendarComponent implements ControlValueAccessor, OnInit {
   }
 
   prevYear(): void {
-    if (moment(this.monthOpt.original.time).year() === 1970) { return; }
-    const backTime = moment(this.monthOpt.original.time)
-      .subtract(1, 'year')
-      .valueOf();
+    if (new Date(this.monthOpt.original.time).getFullYear() === 1970) { return; }
+    const backTime = subYears(this.monthOpt.original.time, 1).valueOf();
     this.monthOpt = this.createMonth(backTime);
   }
 
   nextYear(): void {
-    const nextTime = moment(this.monthOpt.original.time)
-      .add(1, 'year')
-      .valueOf();
+    const nextTime = addYears(this.monthOpt.original.time, 1).valueOf();
     this.monthOpt = this.createMonth(nextTime);
   }
 
   nextMonth(): void {
-    const nextTime = moment(this.monthOpt.original.time)
-      .add(1, 'months')
-      .valueOf();
+    const nextTime = addMonths(this.monthOpt.original.time, 1).valueOf();
     this.monthChange.emit({
       oldMonth: this.calSvc.multiFormat(this.monthOpt.original.time),
       newMonth: this.calSvc.multiFormat(nextTime),
@@ -163,13 +162,11 @@ export class IonRangeCalendarComponent implements ControlValueAccessor, OnInit {
 
   canNext(): boolean {
     if (!this._d.to || this._view !== 'days') { return true; }
-    return this.monthOpt.original.time < moment(this._d.to).valueOf();
+    return this.monthOpt.original.time < new Date(this._d.to).valueOf();
   }
 
   backMonth(): void {
-    const backTime = moment(this.monthOpt.original.time)
-      .subtract(1, 'months')
-      .valueOf();
+    const backTime = subMonths(this.monthOpt.original.time, 1).valueOf();
     this.monthChange.emit({
       oldMonth: this.calSvc.multiFormat(this.monthOpt.original.time),
       newMonth: this.calSvc.multiFormat(backTime),
@@ -179,14 +176,12 @@ export class IonRangeCalendarComponent implements ControlValueAccessor, OnInit {
 
   canBack(): boolean {
     if (!this._d.from || this._view !== 'days') { return true; }
-    return this.monthOpt.original.time > moment(this._d.from).valueOf();
+    return this.monthOpt.original.time > new Date(this._d.from).valueOf();
   }
 
   monthOnSelect(month: number): void {
     this._view = 'days';
-    const newMonth = moment(this.monthOpt.original.time)
-      .month(month)
-      .valueOf();
+    const newMonth = new Date(this.monthOpt.original.time).setMonth(month).valueOf();
     this.monthChange.emit({
       oldMonth: this.calSvc.multiFormat(this.monthOpt.original.time),
       newMonth: this.calSvc.multiFormat(newMonth),
@@ -244,17 +239,19 @@ export class IonRangeCalendarComponent implements ControlValueAccessor, OnInit {
   _onTouched: Function = () => { };
 
   _payloadToTimeNumber(value: CalendarComponentPayloadTypes): number {
-    let date;
-    if (this.type === 'string') {
-      date = moment(value, this.format);
+    let date: Date;
+    if (typeof value === 'string') {
+      date = parse(value, this.format, new Date());
+    } else if (typeof value === 'number' || value instanceof Date) {
+      date = new Date(value);
     } else {
-      date = moment(value);
+      date = new Date(value.years, value.months - 1, value.date, value.hours, value.minutes, value.seconds, value.milliseconds);
     }
     return date.valueOf();
   }
 
   _monthFormat(date: number): string {
-    return moment(date).format(this._d.monthFormat?.replace(/y/g, 'Y'));
+    return format(date, this._d.monthFormat);
   }
 
   private initOpt(): void {
@@ -279,18 +276,24 @@ export class IonRangeCalendarComponent implements ControlValueAccessor, OnInit {
   }
 
   _handleType(value: number): CalendarComponentPayloadTypes {
-    const date = moment(value);
+    const date = new Date(value);
     switch (this.type) {
       case 'string':
-        return date.format(this.format);
+        return format(date, this.format);
       case 'js-date':
-        return date.toDate();
-      case 'moment':
         return date;
       case 'time':
         return date.valueOf();
       case 'object':
-        return date.toObject();
+        return {
+          years: date.getFullYear(),
+          months: date.getMonth() + 1,
+          date: date.getDate(),
+          hours: date.getHours(),
+          minutes: date.getMinutes(),
+          seconds: date.getSeconds(),
+          milliseconds: date.getMilliseconds(),
+        };
       default:
         return date;
     }

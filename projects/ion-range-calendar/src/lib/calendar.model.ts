@@ -116,5 +116,13 @@ export interface CalendarComponentMonthChange {
 export type DefaultDate = Date | string | number | null;
 export type Colors = 'primary' | 'secondary' | 'danger' | 'light' | 'dark' | string;
 export type PickMode = 'multi' | 'single' | 'range';
-export type CalendarComponentTypeProperty = 'string' | 'js-date' | 'moment' | 'time' | 'object';
-export type CalendarComponentPayloadTypes = string | Date | number | {};
+export type CalendarComponentTypeProperty = 'string' | 'js-date' | 'time' | 'object';
+export type CalendarComponentPayloadTypes = string | Date | number | {
+  years: number;
+  months: number;
+  date: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+  milliseconds: number;
+};
