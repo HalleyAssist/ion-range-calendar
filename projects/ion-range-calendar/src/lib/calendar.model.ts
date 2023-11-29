@@ -70,7 +70,6 @@ export interface CalendarModalOptions extends CalendarOptions {
   autoDone?: boolean;
   format?: string;
   cssClass?: string;
-  id?: string;
   isSaveHistory?: boolean;
   closeLabel?: string;
   doneLabel?: string;

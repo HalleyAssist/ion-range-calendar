@@ -42,7 +42,6 @@ export class IonRangeCalendarService {
       to = 0,
       weekStart = 0,
       step = this.DEFAULT_STEP,
-      id = '',
       cssClass = '',
       closeLabel = 'CANCEL',
       closeTitle = '',
@@ -75,7 +74,6 @@ export class IonRangeCalendarService {
     }
 
     this.opts = {
-      id,
       from,
       to,
       pickMode,
