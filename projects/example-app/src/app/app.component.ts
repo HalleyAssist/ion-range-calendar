@@ -3,7 +3,7 @@ import { ModalController } from '@ionic/angular';
 
 import { startOfDay, subDays } from 'date-fns';
 
-import { CalendarChange } from 'projects/ion-range-calendar/src/lib/components/ion-range-calendar.component';
+import { CalendarChange } from 'projects/ion-range-calendar/src/lib/components/ion-range-calendar/ion-range-calendar.component';
 
 import { CalendarModal, CalendarModalOptions } from 'projects/ion-range-calendar/src/public-api';
 

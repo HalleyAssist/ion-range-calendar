@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { CalendarMonth } from '../calendar.model';
-import { defaults } from '../config';
+
+import { CalendarMonth } from '../../calendar.model';
+import { defaults } from '../../config';
 
 @Component({
   selector: 'ion-range-calendar-month-picker',

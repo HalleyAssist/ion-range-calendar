@@ -16,16 +16,14 @@ import {
 
 import { DEFAULT_CALENDAR_OPTIONS } from './services/calendar-options.provider';
 
-const components = [
-  IonRangeCalendarComponent,
-  CalendarModal,
-  CalendarWeekComponent,
-  MonthComponent,
-  MonthPickerComponent
-];
-
 @NgModule({
-  declarations: components,
+  declarations: [
+    IonRangeCalendarComponent,
+    CalendarModal,
+    CalendarWeekComponent,
+    MonthComponent,
+    MonthPickerComponent
+  ],
   imports: [
     CommonModule,
     IonicModule,
@@ -34,7 +32,13 @@ const components = [
   providers: [
     IonRangeCalendarService,
   ],
-  exports: components,
+  exports: [
+    IonRangeCalendarComponent,
+    CalendarModal,
+    CalendarWeekComponent,
+    MonthComponent,
+    MonthPickerComponent
+  ],
 })
 export class IonRangeCalendarModule {
   static forRoot(defaultOptions: CalendarModalOptions = {}) {

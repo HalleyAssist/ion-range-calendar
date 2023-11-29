@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { defaults } from '../config';
+import { defaults } from '../../config';
 
 @Component({
   selector: 'ion-range-calendar-week',

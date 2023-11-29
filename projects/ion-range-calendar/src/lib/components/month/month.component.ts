@@ -1,14 +1,15 @@
-import { Component, ChangeDetectorRef, Input, Output, EventEmitter, forwardRef, AfterViewInit } from '@angular/core';
+import { Component, ChangeDetectorRef, Input, Output, EventEmitter, forwardRef, AfterViewInit, Provider } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { IonRangeCalendarService } from '../services/ion-range-calendar.service';
+import { IonRangeCalendarService } from '../../services/ion-range-calendar.service';
 
-import { CalendarDay, CalendarMonth, PickMode } from '../calendar.model';
+import { CalendarDay, CalendarMonth, PickMode } from '../../calendar.model';
 
-import { defaults } from '../config';
+import { defaults } from '../../config';
+
 import { addDays, isAfter, startOfDay, subDays } from 'date-fns';
 
-export const MONTH_VALUE_ACCESSOR: any = {
+export const MONTH_VALUE_ACCESSOR: Provider = {
   provide: NG_VALUE_ACCESSOR,
   useExisting: forwardRef(() => MonthComponent),
   multi: true,
@@ -27,7 +28,6 @@ export class MonthComponent implements ControlValueAccessor, AfterViewInit {
   @Input() month: CalendarMonth;
   @Input() pickMode: PickMode;
   @Input() isSaveHistory: boolean;
-  @Input() id: any;
   @Input() readonly = false;
   @Input() color: string = defaults.COLOR;
 
@@ -60,7 +60,7 @@ export class MonthComponent implements ControlValueAccessor, AfterViewInit {
     return this._date;
   }
 
-  writeValue(obj: any): void {
+  writeValue(obj: CalendarDay[]): void {
     if (Array.isArray(obj)) {
       this._date = obj;
     }

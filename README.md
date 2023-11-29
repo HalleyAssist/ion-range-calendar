@@ -236,7 +236,7 @@ export class HomePage {
 
     myCalendar.present();
 
-    const event: any = await myCalendar.onDidDismiss();
+    const event = await myCalendar.onDidDismiss();
     const date: CalendarResult = event.data;
     console.log(date);
   }
@@ -261,7 +261,7 @@ openCalendar() {
 
   myCalendar.present();
 
-  const event: any = await myCalendar.onDidDismiss();
+  const event = await myCalendar.onDidDismiss();
   const date = event.data;
   const from: CalendarResult = date.from;
   const to: CalendarResult = date.to;
@@ -288,7 +288,7 @@ openCalendar() {
 
   myCalendar.present();
 
-  const event: any = await myCalendar.onDidDismiss();
+  const event = await myCalendar.onDidDismiss();
   const date: CalendarResult = event.data;
   console.log(date);
 }
@@ -311,7 +311,7 @@ openCalendar() {
 
   myCalendar.present();
 
-  const event: any = await myCalendar.onDidDismiss();
+  const event = await myCalendar.onDidDismiss();
   const date: CalendarResult = event.data;
   console.log(date);
 }
@@ -349,7 +349,7 @@ openCalendar() {
 
   myCalendar.present();
 
-  const event: any = await myCalendar.onDidDismiss();
+  const event = await myCalendar.onDidDismiss();
   const date: CalendarResult = event.data;
   console.log(date);
 }
@@ -382,7 +382,7 @@ openCalendar() {
 
   myCalendar.present();
 
-  const event: any = await myCalendar.onDidDismiss();
+  const event = await myCalendar.onDidDismiss();
   const date: CalendarResult = event.data;
   console.log(date);
 }

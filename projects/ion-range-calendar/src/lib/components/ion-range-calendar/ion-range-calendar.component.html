@@ -3,8 +3,8 @@
 
   <ion-button type="button" fill="clear" class="switch-btn" (click)="switchView()">
     {{ _monthFormat(monthOpt.original.time) }}
-    <ion-icon class="arrow-dropdown"
-      [name]="_view === 'days' ? _compatibleIcons.caretDown : _compatibleIcons.caretUp"></ion-icon>
+    <ion-icon class="arrow-dropdown" [name]="_view === 'days' ? _compatibleIcons.caretDown : _compatibleIcons.caretUp">
+    </ion-icon>
   </ion-button>
 
   } @else {

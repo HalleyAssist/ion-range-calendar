@@ -5,7 +5,7 @@ import { IonicModule } from "@ionic/angular";
 
 import { addDays, parse, startOfDay, subDays } from "date-fns";
 
-import { CalendarDay, CalendarModalOptions, CalendarMonth } from "../calendar.model";
+import { CalendarDay, CalendarModalOptions, CalendarMonth } from "../../calendar.model";
 
 import { MonthComponent } from "./month.component";
 

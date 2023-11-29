@@ -11,11 +11,11 @@ import {
   CalendarDay,
   CalendarModalOptions,
   CalendarMonth
-} from '../calendar.model';
+} from '../../calendar.model';
 
-import { defaults } from '../config';
+import { defaults } from '../../config';
 
-import { IonRangeCalendarService } from '../services/ion-range-calendar.service';
+import { IonRangeCalendarService } from '../../services/ion-range-calendar.service';
 
 export const ION_CAL_VALUE_ACCESSOR: Provider = {
   provide: NG_VALUE_ACCESSOR,

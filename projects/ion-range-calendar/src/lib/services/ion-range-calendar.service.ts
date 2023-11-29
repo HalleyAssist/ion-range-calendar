@@ -1,6 +1,6 @@
 import { Inject, Injectable, Optional } from '@angular/core';
 
-import { addDays, addMonths, format, getDaysInMonth, isAfter, isBefore, isToday, isWithinInterval, subDays } from 'date-fns';
+import { addDays, addMonths, format, getDaysInMonth, isAfter, isBefore, isSameDay, isToday, isWithinInterval, subDays } from 'date-fns';
 
 import {
   CalendarOriginal,
@@ -70,6 +70,10 @@ export class IonRangeCalendarService {
       maxRange = 0,
     } = { ...this.defaultOpts, ...calendarOptions };
 
+    if (calendarOptions.defaultDateRange) {
+      //  if we have a default date range, and to and from
+    }
+
     this.opts = {
       id,
       from,
@@ -98,7 +102,10 @@ export class IonRangeCalendarService {
       step,
       defaultTitle,
       defaultSubtitle,
-      defaultScrollTo: calendarOptions.defaultScrollTo || new Date(from),
+      //  default scroll is either provided, inferred from the provided default date range from, the provided from, or today
+      defaultScrollTo: calendarOptions.defaultScrollTo ||
+        (calendarOptions.defaultDateRange ? new Date(calendarOptions.defaultDateRange.from) : null) ||
+        new Date(from),
       defaultDate: calendarOptions.defaultDate || null,
       defaultDates: calendarOptions.defaultDates || null,
       defaultDateRange: calendarOptions.defaultDateRange || null,
@@ -126,9 +133,9 @@ export class IonRangeCalendarService {
     };
   }
 
-  findDayConfig(day: any, opt: CalendarModalOptions): any {
+  findDayConfig(day: Date, opt: CalendarModalOptions): DayConfig | undefined {
     if (opt.daysConfig && opt.daysConfig.length <= 0) return null;
-    return opt.daysConfig?.find(n => day.isSame(n.date, 'day'));
+    return opt.daysConfig?.find(n => isSameDay(day, n.date));
   }
 
   createCalendarDay(time: number, opt: CalendarModalOptions, month?: number): CalendarDay {
@@ -249,7 +256,7 @@ export class IonRangeCalendarService {
   }
 
   wrapResult(original: CalendarDay[], pickMode: string) {
-    let result: any;
+    let result: CalendarResult[] | CalendarResult | { from: CalendarResult; to: CalendarResult } | CalendarDay[];
     switch (pickMode) {
       case 'single':
         result = this.multiFormat(original[0].time);

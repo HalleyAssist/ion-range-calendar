@@ -3,8 +3,8 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { IonRangeCalendarComponent } from './ion-range-calendar.component';
-import { CalendarWeekComponent } from './calendar-week.component';
-import { MonthComponent } from './month.component';
+import { CalendarWeekComponent } from '../calendar-week/calendar-week.component';
+import { MonthComponent } from '../month/month.component';
 
 describe('IonRangeCalendarComponent', () => {
   let component: IonRangeCalendarComponent;

@@ -9,11 +9,13 @@ import {
   AfterViewInit,
   HostBinding,
 } from '@angular/core';
+
 import { NavParams, ModalController, IonContent } from '@ionic/angular';
+import { IonContentCustomEvent, IonInfiniteScrollCustomEvent, ScrollDetail } from '@ionic/core';
 
-import { CalendarDay, CalendarMonth, CalendarModalOptions, DefaultDate } from '../calendar.model';
+import { CalendarDay, CalendarMonth, CalendarModalOptions, DefaultDate } from '../../calendar.model';
 
-import { IonRangeCalendarService } from '../services/ion-range-calendar.service';
+import { IonRangeCalendarService } from '../../services/ion-range-calendar.service';
 
 import { addMonths, differenceInMonths, format, isAfter, startOfDay, subMonths } from 'date-fns';
 
@@ -114,7 +116,7 @@ export class CalendarModal implements OnInit, AfterViewInit {
     }
   }
 
-  onChange(data: any): void {
+  onChange(data: CalendarDay[]): void {
     const { pickMode, autoDone } = this._d;
 
     this.datesTemp = data;
@@ -166,7 +168,7 @@ export class CalendarModal implements OnInit, AfterViewInit {
     return !!this.datesTemp[0];
   }
 
-  nextMonth(event: any): void {
+  nextMonth(event: IonInfiniteScrollCustomEvent<void>): void {
     const len = this.calendarMonths.length;
     const final = this.calendarMonths[len - 1];
     const nextTime = addMonths(final.original.time, 1).valueOf();
@@ -215,7 +217,7 @@ export class CalendarModal implements OnInit, AfterViewInit {
     this.scrollToDate(this._d.defaultScrollTo);
   }
 
-  onScroll($event: any): void {
+  onScroll($event: IonContentCustomEvent<ScrollDetail>): void {
     if (!this._d.canBackwardsSelected) return;
 
     const { detail } = $event;
