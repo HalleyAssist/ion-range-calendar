@@ -450,15 +450,15 @@ openCalendar() {
 
 ### CalendarResult
 
-| Name    | Type     |
-| ------- | -------- |
-| time    | `number` |
-| unix    | `number` |
-| dateObj | `Date`   |
-| string  | `string` |
-| years   | `number` |
-| months  | `number` |
-| date    | `number` |
+| Name    | Type     | Notes                |
+| ------- | -------- | -------------------- |
+| time    | `number` | unix milliseconds    |
+| unix    | `number` | unix seconds         |
+| dateObj | `Date`   | JS Date              |
+| string  | `string` | format: `yyyy-MM-dd` |
+| years   | `number` | year                 |
+| months  | `number` | month                |
+| date    | `number` | day                  |
 
 [npm-image]: https://img.shields.io/npm/v/@googlproxer/ion-range-calendar.svg
 [npm-url]: https://www.npmjs.com/package/@googlproxer/ion-range-calendar

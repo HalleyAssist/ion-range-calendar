@@ -69,10 +69,6 @@ export class IonRangeCalendarService {
       maxRange = 0,
     } = { ...this.defaultOpts, ...calendarOptions };
 
-    if (calendarOptions.defaultDateRange) {
-      //  if we have a default date range, and to and from
-    }
-
     this.opts = {
       from,
       to,
