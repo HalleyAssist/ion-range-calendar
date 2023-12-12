@@ -22,7 +22,7 @@ Forked from : <https://github.com/hsuanxyz/ion-range-calendar>
 ### Installation
 
 ```bash
- npm i @googlproxer/ion-range-calendar
+ npm i @googlproxer/ion-range-calendar date-fns date-fns-tz
  ```
 
 ### Import module
@@ -164,12 +164,12 @@ export class HomePage {
 
 ### Input Properties
 
-| Name     | Type                       | Default      | Description  |
-| -------- | -------------------------- | ------------ | ------------ |
-| options  | `CalendarComponentOptions` | null         | options      |
-| format   | `string`                   | 'yyyy-MM-dd' | value format |
-| type     | `string`                   | 'string'     | value type   |
-| readonly | `boolean`                  | false        | readonly     |
+| Name     | Type                       | Default      | Description            |
+| -------- | -------------------------- | ------------ | ---------------------- |
+| options  | `CalendarComponentOptions` | null         | options                |
+| format   | `string`                   | 'yyyy-MM-dd' | date-fns format string |
+| type     | `string`                   | 'string'     | value type             |
+| readonly | `boolean`                  | false        | readonly               |
 
 ### Output Properties
 

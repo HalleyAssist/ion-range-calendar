@@ -1,7 +1,7 @@
 import { Component, EventEmitter, forwardRef, Input, OnInit, Output, Provider } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { addMonths, addYears, format, parse, subMonths, subYears } from 'date-fns';
+import { addMonths, addYears, format, parse, startOfDay, subMonths, subYears } from 'date-fns';
 
 import {
   CalendarComponentMonthChange,
@@ -32,7 +32,7 @@ interface CompatibleIcons {
 
 export type CalendarChange =
   | CalendarComponentPayloadTypes
-  | { from: CalendarComponentPayloadTypes, to: CalendarComponentPayloadTypes }
+  | { from?: CalendarComponentPayloadTypes, to?: CalendarComponentPayloadTypes }
   | CalendarComponentPayloadTypes[];
 
 @Component({
@@ -238,9 +238,11 @@ export class IonRangeCalendarComponent implements ControlValueAccessor, OnInit {
 
   _onTouched: Function = () => { };
 
-  _payloadToTimeNumber(value: CalendarComponentPayloadTypes): number {
+  _payloadToTimeNumber(value?: CalendarComponentPayloadTypes | null): number {
     let date: Date;
-    if (typeof value === 'string') {
+    if (!value) {
+      date = startOfDay(new Date());
+    } else if (typeof value === 'string') {
       date = parse(value, this.format, new Date());
     } else if (typeof value === 'number' || value instanceof Date) {
       date = new Date(value);
@@ -271,7 +273,7 @@ export class IonRangeCalendarComponent implements ControlValueAccessor, OnInit {
     return this.calSvc.createMonthsByPeriod(date, 1, this._d)[0];
   }
 
-  _createCalendarDay(value: CalendarComponentPayloadTypes): CalendarDay {
+  _createCalendarDay(value?: CalendarComponentPayloadTypes | null): CalendarDay {
     return this.calSvc.createCalendarDay(this._payloadToTimeNumber(value), this._d);
   }
 
@@ -330,12 +332,8 @@ export class IonRangeCalendarComponent implements ControlValueAccessor, OnInit {
         break;
 
       case 'range':
-        if (value.from) {
-          this._calendarMonthValue[0] = value.from ? this._createCalendarDay(value.from) : null;
-        }
-        if (value.to) {
-          this._calendarMonthValue[1] = value.to ? this._createCalendarDay(value.to) : null;
-        }
+        this._calendarMonthValue[0] = this._createCalendarDay(value.from);
+        this._calendarMonthValue[1] = this._createCalendarDay(value.to);
         break;
 
       case 'multi':
@@ -348,7 +346,7 @@ export class IonRangeCalendarComponent implements ControlValueAccessor, OnInit {
         }
         break;
 
-      default:
+      default: break;
     }
   }
 }

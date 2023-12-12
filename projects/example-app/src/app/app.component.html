@@ -3,7 +3,20 @@
     <ion-toolbar>
       <ion-title> Example App </ion-title>
 
+
       <ion-buttons slot="end">
+        <ion-item>
+          <ion-select label="Mode" [(ngModel)]="mode" placeholder="Select Mode" interface="popover">
+            <ion-select-option value="single"> Single </ion-select-option>
+            <ion-select-option value="multi"> Multi </ion-select-option>
+            <ion-select-option value="range"> Range </ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-button (click)="resetData()">
+          <ion-label> Reset </ion-label>
+        </ion-button>
+
         <ion-button (click)="onClick()">
           <ion-label> Open Modal </ion-label>
         </ion-button>
@@ -13,7 +26,8 @@
 
   <ion-content>
 
-    <ion-range-calendar [(ngModel)]="date" (change)="onChange($event)" [type]="'js-date'" [format]="'yyyy-MM-dd'">
+    <ion-range-calendar [(ngModel)]="data" (change)="onChange($event)" [type]="'js-date'" [format]="'yyyy-MM-dd'"
+      [options]="options">
     </ion-range-calendar>
 
   </ion-content>
