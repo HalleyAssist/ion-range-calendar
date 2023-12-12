@@ -2,11 +2,10 @@ import { Component } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 
 import { startOfDay, subDays } from 'date-fns';
-import { PickMode } from 'ion-range-calendar';
 
 import { CalendarChange } from 'projects/ion-range-calendar/src/lib/components/ion-range-calendar/ion-range-calendar.component';
 
-import { CalendarModal, CalendarModalOptions } from 'projects/ion-range-calendar/src/public-api';
+import { CalendarModal, CalendarModalOptions, PickMode } from 'projects/ion-range-calendar/src/public-api';
 
 @Component({
   selector: 'app-root',
@@ -46,12 +45,12 @@ export class AppComponent {
 
   public get data() {
     switch (this.mode) {
-      case 'single':
-        return this.date;
       case 'range':
         return this.dateRange;
       case 'multi':
         return this.dates;
+      default:
+        return this.date;
     }
   }
 
