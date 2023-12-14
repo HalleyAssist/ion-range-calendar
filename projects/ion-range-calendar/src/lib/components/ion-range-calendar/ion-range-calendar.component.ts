@@ -238,11 +238,9 @@ export class IonRangeCalendarComponent implements ControlValueAccessor, OnInit {
 
   _onTouched: Function = () => { };
 
-  _payloadToTimeNumber(value?: CalendarComponentPayloadTypes | null): number {
+  _payloadToTimeNumber(value: CalendarComponentPayloadTypes): number {
     let date: Date;
-    if (!value) {
-      date = startOfDay(new Date());
-    } else if (typeof value === 'string') {
+    if (typeof value === 'string') {
       date = parse(value, this.format, new Date());
     } else if (typeof value === 'number' || value instanceof Date) {
       date = new Date(value);
@@ -273,7 +271,8 @@ export class IonRangeCalendarComponent implements ControlValueAccessor, OnInit {
     return this.calSvc.createMonthsByPeriod(date, 1, this._d)[0];
   }
 
-  _createCalendarDay(value?: CalendarComponentPayloadTypes | null): CalendarDay {
+  _createCalendarDay(value?: CalendarComponentPayloadTypes | null): CalendarDay | null {
+    if (!value) return null;
     return this.calSvc.createCalendarDay(this._payloadToTimeNumber(value), this._d);
   }
 
@@ -338,9 +337,7 @@ export class IonRangeCalendarComponent implements ControlValueAccessor, OnInit {
 
       case 'multi':
         if (Array.isArray(value)) {
-          this._calendarMonthValue = value.map(e => {
-            return this._createCalendarDay(e);
-          });
+          this._calendarMonthValue = value.map(e => this._createCalendarDay(e));
         } else {
           this._calendarMonthValue = [null, null];
         }

@@ -1,6 +1,6 @@
 {
   "name": "ion-range-calendar",
-  "version": "17.0.3",
+  "version": "17.0.4",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
