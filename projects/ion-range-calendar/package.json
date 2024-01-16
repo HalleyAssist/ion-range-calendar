@@ -1,10 +1,10 @@
 {
   "name": "@googlproxer/ion-range-calendar",
-  "version": "17.0.4",
+  "version": "17.0.5",
   "peerDependencies": {
     "@angular/common": ">=17.0.0",
     "@angular/core": ">=17.0.0",
-    "date-fns": "^2.30.0"
+    "date-fns": ">=3.0.0"
   },
   "license": "MIT",
   "description": "ion-range-calendar is an Ionic Angular range calendar",

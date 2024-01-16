@@ -15,7 +15,7 @@ Forked from : <https://github.com/hsuanxyz/ion-range-calendar>
 
 ## Supports
 
-* `"@ionic/angular": ">=4.0.0"`
+* `"@ionic/angular": ">=7.0.0"`
 
 ## Usage
 
