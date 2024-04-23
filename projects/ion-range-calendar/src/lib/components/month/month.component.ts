@@ -172,6 +172,16 @@ export class MonthComponent implements ControlValueAccessor, AfterViewInit {
         this._date[1] = Object.assign({}, item);
         this.selectEnd.emit(this._date[1]);
         this.adjustStart(maxRange);
+        // if start is this day, set end to this day
+      } else if (this._date[0].time === item.time) {
+        this._date[1] = Object.assign({}, item);
+        this.selectEnd.emit(this._date[1]);
+        this.adjustEnd(maxRange);
+        // if end is this day, set start to this day
+      } else if (this._date[1].time === item.time) {
+        this._date[0] = Object.assign({}, item);
+        this.selectStart.emit(this._date[0]);
+        this.adjustStart(maxRange);
         //  else set end to null and start to this day
       } else {
         //  bump selected range to new range starting from selected to selected plus existing range

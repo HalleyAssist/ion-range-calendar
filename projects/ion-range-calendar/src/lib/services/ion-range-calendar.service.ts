@@ -65,7 +65,7 @@ export class IonRangeCalendarService {
       daysConfig = _daysConfig,
       disableWeeks = _disableWeeks,
       showAdjacentMonthDay = true,
-      defaultEndDateToStartDate = false,
+      defaultEndDateToStartDate = true,
       maxRange = 0,
     } = { ...this.defaultOpts, ...calendarOptions };
 
