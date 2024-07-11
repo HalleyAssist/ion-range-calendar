@@ -1,4 +1,12 @@
 <div class="title">
+
+  @if (_showToggleButtons) {
+
+  <ion-button type="button" fill="clear" class="back" [disabled]="!canBack()" (click)="prev()">
+    <ion-icon slot="icon-only" size="small" [name]="_compatibleIcons.chevronBack"></ion-icon>
+  </ion-button>
+
+  }
   @if (_showMonthPicker) {
 
   <ion-button type="button" fill="clear" class="switch-btn" (click)="switchView()">
@@ -14,22 +22,22 @@
   </div>
 
   }
+
   <ng-template #title>
     <div class="switch-btn">
       {{ _monthFormat(monthOpt.original.time) }}
     </div>
   </ng-template>
+
   @if (_showToggleButtons) {
 
-  <ion-button type="button" fill="clear" class="back" [disabled]="!canBack()" (click)="prev()">
-    <ion-icon slot="icon-only" size="small" [name]="_compatibleIcons.chevronBack"></ion-icon>
-  </ion-button>
   <ion-button type="button" fill="clear" class="forward" [disabled]="!canNext()" (click)="next()">
     <ion-icon slot="icon-only" size="small" [name]="_compatibleIcons.chevronForward"></ion-icon>
   </ion-button>
 
   }
 </div>
+
 @if (_view === 'days') {
 
 <ion-range-calendar-week color="transparent" [weekArray]="_d.weekdays" [weekStart]="_d.weekStart">

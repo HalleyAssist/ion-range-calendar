@@ -1,6 +1,6 @@
 <ion-toolbar [class]="'week-toolbar ' + color" no-border-top>
   <ul [class]="'week-title ' + color">
-    @for (w of _displayWeekArray; track w) {
+    @for (w of _displayWeekArray; track $index) {
     <li>{{ w }}</li>
     }
   </ul>

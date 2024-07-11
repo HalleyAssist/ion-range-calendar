@@ -2,14 +2,14 @@
   @if (!_isRange) {
 
   <div class="days-box">
-    @for (day of month.days; track trackByTime($index, day)) {
+    @for (day of month.days; track $index) {
 
     <div class="days">
       @if (day) {
 
       <button type='button' [class]="'days-btn ' + day.cssClass" [class.today]="day.isToday" (click)="onSelected(day)"
         [class.marked]="day.marked" [class.last-month-day]="day.isLastMonth" [class.next-month-day]="day.isNextMonth"
-        [class.on-selected]="isSelected(day.time)" [disabled]="day.disable">
+        [class.on-selected]="isSelected((day ? day.time : $index))" [disabled]="day.disable">
         <p>{{ day.title }}</p>
         @if (day.subTitle) {
         <small>{{ day?.subTitle }}</small>
@@ -25,7 +25,7 @@
   } @else {
 
   <div class="days-box">
-    @for (day of month.days; track trackByTime($index, day)) {
+    @for (day of month.days; track $index) {
 
     <div class="days" [class.startSelection]="isStartSelection(day)" [class.endSelection]="isEndSelection(day)"
       [class.is-first-wrap]="day?.isFirst" [class.is-last-wrap]="day?.isLast" [class.between]="isBetween(day)">
@@ -33,8 +33,8 @@
 
       <button type='button' [class]="'days-btn ' + day.cssClass" [class.today]="day.isToday" (click)="onSelected(day)"
         [class.marked]="day.marked" [class.last-month-day]="day.isLastMonth" [class.next-month-day]="day.isNextMonth"
-        [class.is-first]="day.isFirst" [class.is-last]="day.isLast" [class.on-selected]="isSelected(day.time)"
-        [disabled]="day.disable">
+        [class.is-first]="day.isFirst" [class.is-last]="day.isLast"
+        [class.on-selected]="isSelected((day ? day.time : $index))" [disabled]="day.disable">
         <p>{{ day.title }}</p>
         @if (day.subTitle) {
         <small>{{ day?.subTitle }}</small>

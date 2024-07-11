@@ -1,6 +1,6 @@
 {
   "name": "@googlproxer/ion-range-calendar",
-  "version": "17.0.6",
+  "version": "18.0.0",
   "peerDependencies": {
     "@angular/common": ">=17.0.0",
     "@angular/core": ">=17.0.0",
@@ -17,7 +17,7 @@
     "url": "https://github.com/HalleyAssist/ion-range-calendar/issues"
   },
   "keywords": [
-    "Angular 17",
+    "Angular 18",
     "ion-range-calendar",
     "Ionic 8",
     "Range Calendar"

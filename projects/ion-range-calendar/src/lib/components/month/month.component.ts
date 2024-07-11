@@ -74,10 +74,6 @@ export class MonthComponent implements ControlValueAccessor, AfterViewInit {
     this._onTouched = fn;
   }
 
-  trackByTime(index: number, item: CalendarDay): number {
-    return item ? item.time : index;
-  }
-
   isEndSelection(day: CalendarDay): boolean {
     if (!day) return false;
     if (this.pickMode !== 'range' || !this._isInit || this._date[1] === null) {

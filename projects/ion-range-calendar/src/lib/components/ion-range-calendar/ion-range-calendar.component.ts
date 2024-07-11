@@ -175,6 +175,7 @@ export class IonRangeCalendarComponent implements ControlValueAccessor, OnInit {
   }
 
   canBack(): boolean {
+    if (this._d.canBackwardsSelected) { return true; }
     if (!this._d.from || this._view !== 'days') { return true; }
     return this.monthOpt.original.time > new Date(this._d.from).valueOf();
   }

@@ -37,7 +37,7 @@ export class IonRangeCalendarService {
   safeOpt(calendarOptions: Partial<CalendarModalOptions> = {}): CalendarModalOptions {
     const _disableWeeks: number[] = [];
     const _daysConfig: DayConfig[] = [];
-    const {
+    let {
       from = new Date(),
       to = 0,
       weekStart = 0,
@@ -69,6 +69,21 @@ export class IonRangeCalendarService {
       maxRange = 0,
     } = { ...this.defaultOpts, ...calendarOptions };
 
+    //  if from is not provided, but a default range is, set from to the default range from
+    if (typeof calendarOptions.from === 'undefined' && calendarOptions.defaultDateRange) {
+      from = subDays(new Date(calendarOptions.defaultDateRange.from), 1);
+    }
+
+    //  default scroll is either provided, inferred from the provided default date range from, the provided from, or today
+    let defaultScrollTo = calendarOptions.defaultScrollTo;
+    if (!defaultScrollTo) {
+      if (calendarOptions.defaultDateRange) {
+        defaultScrollTo = new Date(calendarOptions.defaultDateRange.from);
+      } else {
+        defaultScrollTo = from ? new Date(from) : new Date();
+      }
+    }
+
     this.opts = {
       from,
       to,
@@ -96,10 +111,7 @@ export class IonRangeCalendarService {
       step,
       defaultTitle,
       defaultSubtitle,
-      //  default scroll is either provided, inferred from the provided default date range from, the provided from, or today
-      defaultScrollTo: calendarOptions.defaultScrollTo ||
-        (calendarOptions.defaultDateRange ? new Date(calendarOptions.defaultDateRange.from) : null) ||
-        new Date(from),
+      defaultScrollTo,
       defaultDate: calendarOptions.defaultDate || null,
       defaultDates: calendarOptions.defaultDates || null,
       defaultDateRange: calendarOptions.defaultDateRange || null,
@@ -137,31 +149,35 @@ export class IonRangeCalendarService {
     const date = new Date(time);
     const today = isToday(date);
     const dayConfig = this.findDayConfig(_time, opt);
-    const _rangeBeg = new Date(opt.from).valueOf();
-    const _rangeEnd = new Date(opt.to).valueOf();
-    let isBetween = true;
+    const _rangeBeg = new Date(opt.from);
+    const _rangeEnd = new Date(opt.to);
+    const _hasBeg = !!_rangeBeg.valueOf();
+    const _hasEnd = !!_rangeEnd.valueOf();
+    let isInRange = true;
     const disableWeeks = opt.disableWeeks && opt.disableWeeks.indexOf(_time.getDay()) !== -1;
-    if (_rangeBeg > 0 && _rangeEnd > 0) {
-      if (!opt.canBackwardsSelected) {
-        isBetween = !isWithinInterval(_time, { start: _rangeBeg, end: _rangeEnd, });
+
+    if (_hasBeg && _hasEnd) {
+      //  both from and to are set, check if time is in between, unless backwards selection is allowed, then check if time is before to
+      if (opt.canBackwardsSelected) {
+        isInRange = isBefore(_time, _rangeEnd);
       } else {
-        isBetween = isBefore(_time, _rangeBeg) ? false : isBetween;
+        isInRange = isWithinInterval(_time, { start: _rangeBeg, end: _rangeEnd, });
       }
-    } else if (_rangeBeg > 0 && _rangeEnd === 0) {
-      if (!opt.canBackwardsSelected) {
-        const _addTime = addDays(_time, 1);
-        isBetween = !isAfter(_addTime, _rangeBeg);
-      } else {
-        isBetween = false;
-      }
+    } else if (_hasBeg && !_hasEnd && !opt.canBackwardsSelected) {
+      // if only from is set, check if time is after from, unless backwards selection is allowed
+      isInRange = isAfter(_time, _rangeBeg);
+    } else if (!_hasBeg && _hasEnd) {
+      // if only to is set, check if time is before to
+      isInRange = isBefore(_time, _rangeEnd);
     }
+    //  if both from and to are not set, then all days are in range
 
     let _disable = false;
 
     if (dayConfig && typeof dayConfig.disable === 'boolean') {
       _disable = dayConfig.disable;
     } else {
-      _disable = disableWeeks || isBetween;
+      _disable = disableWeeks || !isInRange;
     }
 
     let title = new Date(time).getDate().toString();

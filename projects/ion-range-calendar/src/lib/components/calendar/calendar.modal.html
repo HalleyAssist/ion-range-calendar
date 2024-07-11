@@ -51,7 +51,7 @@
   [ngClass]="{'multi-selection': _d.pickMode === 'multi'}">
 
   <div #months>
-    @for (month of calendarMonths; track trackByIndex(i, month); let i = $index) {
+    @for (month of calendarMonths; track month.original.time; let i = $index) {
     <div class="month-box" [attr.id]="'month-' + i">
       <h4 class="text-center month-title">{{ _monthFormat(month.original.date) }}</h4>
       <ion-range-calendar-month [month]="month" [pickMode]="_d.pickMode" [isSaveHistory]="_d.isSaveHistory"

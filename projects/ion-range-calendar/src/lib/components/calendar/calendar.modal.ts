@@ -73,8 +73,8 @@ export class CalendarModal implements OnInit, AfterViewInit {
     }
 
     this.calendarMonths = this.calSvc.createMonthsByPeriod(
-      new Date(this._d.from).valueOf(),
-      this.findInitMonthNumber(this._d.defaultScrollTo) + this.step,
+      new Date(this._d.defaultScrollTo || this._d.from).valueOf(),
+      this.step,
       this._d
     );
   }
@@ -275,7 +275,4 @@ export class CalendarModal implements OnInit, AfterViewInit {
     return format(new Date(date), this._d.monthFormat);
   }
 
-  trackByIndex(index: number, month: CalendarMonth): number {
-    return month.original ? month.original.time : index;
-  }
 }
