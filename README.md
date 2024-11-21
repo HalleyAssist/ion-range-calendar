@@ -15,6 +15,10 @@
 
 * `"@ionic/angular": ">=8.2.0"`
 
+# Breaking changes 19.0.0
+
+  Since the conversion from traditional `@Input` to Signal `input`, the Modal version requires `useSetInputAPI` to be set to true, see [As Modal](#as-modal) for more details.
+
 ## Usage
 
 ### Installation
