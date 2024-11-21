@@ -1,10 +1,10 @@
 import { ComponentFixture, fakeAsync, flush, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
-import { IonicModule, ModalController } from '@ionic/angular';
+import { IonSelect, ModalController } from '@ionic/angular/standalone';
 
-import { IonRangeCalendarModule } from 'projects/ion-range-calendar/src/public-api';
+import { IonRangeCalendarComponent } from 'projects/ion-range-calendar/src/public-api';
 
 import { AppComponent } from './app.component';
 
@@ -28,13 +28,11 @@ describe('AppComponent', () => {
 
     await TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule,
+        RouterModule,
         FormsModule,
-        IonicModule.forRoot(),
-        IonRangeCalendarModule
-      ],
-      declarations: [
-        AppComponent
+        IonRangeCalendarComponent,
+        IonSelect,
+        AppComponent,
       ],
       providers: [
         { provide: ModalController, useValue: modalCtrlSpy },

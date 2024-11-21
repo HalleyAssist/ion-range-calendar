@@ -1,7 +1,7 @@
-import { Component, EventEmitter, forwardRef, Input, OnInit, Output, Provider } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Component, forwardRef, inject, input, OnInit, output, Provider } from '@angular/core';
+import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { addMonths, addYears, format, parse, startOfDay, subMonths, subYears } from 'date-fns';
+import { addMonths, addYears, format, parse, subMonths, subYears } from 'date-fns';
 
 import {
   CalendarComponentMonthChange,
@@ -10,12 +10,27 @@ import {
   CalendarComponentTypeProperty,
   CalendarDay,
   CalendarModalOptions,
-  CalendarMonth
-} from '../../calendar.model';
+  CalendarMonth,
+  ControlValueType,
+  RangeChange
+} from '../../calendar.types';
 
 import { defaults } from '../../config';
 
 import { IonRangeCalendarService } from '../../services/ion-range-calendar.service';
+
+import { CalendarWeekComponent } from '../calendar-week/calendar-week.component';
+import { MonthPickerComponent } from '../month-picker/month-picker.component';
+import { MonthComponent } from '../month/month.component';
+
+import { IonButton, IonIcon } from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+import {
+  caretDownOutline,
+  caretUpOutline,
+  chevronBackOutline,
+  chevronForwardOutline
+} from 'ionicons/icons';
 
 export const ION_CAL_VALUE_ACCESSOR: Provider = {
   provide: NG_VALUE_ACCESSOR,
@@ -30,18 +45,36 @@ interface CompatibleIcons {
   chevronForward: string;
 }
 
-export type CalendarChange =
+export type ionChange =
   | CalendarComponentPayloadTypes
   | { from?: CalendarComponentPayloadTypes, to?: CalendarComponentPayloadTypes }
   | CalendarComponentPayloadTypes[];
 
 @Component({
   selector: 'ion-range-calendar',
-  providers: [ION_CAL_VALUE_ACCESSOR],
+  providers: [
+    ION_CAL_VALUE_ACCESSOR,
+    IonRangeCalendarService,
+  ],
   styleUrls: ['ion-range-calendar.component.scss'],
   templateUrl: 'ion-range-calendar.component.html',
+  imports: [
+    CalendarWeekComponent,
+    MonthComponent,
+    FormsModule,
+    MonthPickerComponent,
+    IonButton,
+    IonIcon,
+  ]
 })
 export class IonRangeCalendarComponent implements ControlValueAccessor, OnInit {
+
+  readonly format = input<string>(defaults.DATE_FORMAT);
+  readonly type = input<CalendarComponentTypeProperty>('string');
+  readonly readonly = input(false);
+
+  options = input<CalendarComponentOptions, CalendarComponentOptions>(undefined, { transform: this.setOptions.bind(this) });
+
   _d: CalendarModalOptions;
   _options: CalendarComponentOptions;
   _view: 'month' | 'days' = 'days';
@@ -68,39 +101,33 @@ export class IonRangeCalendarComponent implements ControlValueAccessor, OnInit {
 
   monthOpt: CalendarMonth;
 
-  @Input() format: string = defaults.DATE_FORMAT;
-  @Input() type: CalendarComponentTypeProperty = 'string';
-  @Input() readonly = false;
-  @Output() change: EventEmitter<CalendarChange> = new EventEmitter();
-  @Output() monthChange: EventEmitter<CalendarComponentMonthChange> = new EventEmitter();
-  @Output() select: EventEmitter<CalendarDay> = new EventEmitter();
-  @Output() selectStart: EventEmitter<CalendarDay> = new EventEmitter();
-  @Output() selectEnd: EventEmitter<CalendarDay> = new EventEmitter();
-
-  @Input()
-  set options(value: CalendarComponentOptions) {
-    this._options = value;
-    this.initOpt();
-    if (this.monthOpt && this.monthOpt.original) {
-      this.monthOpt = this.createMonth(this.monthOpt.original.time);
-    }
-  }
-
-  get options(): CalendarComponentOptions {
-    return this._options;
-  }
+  ionChange = output<ionChange>();
+  monthChange = output<CalendarComponentMonthChange>();
+  select = output<CalendarDay>();
+  selectStart = output<CalendarDay>();
+  selectEnd = output<CalendarDay>();
 
   readonly MONTH_DATE_FORMAT = 'MMMM yyyy';
 
-  constructor(
-    public calSvc: IonRangeCalendarService
-  ) {
+  readonly calendarService = inject(IonRangeCalendarService);
+
+  _onChanged!: (event: ControlValueType) => void;
+  _onTouched!: (event: ControlValueType) => void;
+
+  constructor() {
     this._compatibleIcons = {
       caretDown: 'caret-down-outline',
       caretUp: 'caret-up-outline',
       chevronBack: 'chevron-back-outline',
       chevronForward: 'chevron-forward-outline',
     };
+
+    addIcons({
+      caretDownOutline,
+      caretUpOutline,
+      chevronBackOutline,
+      chevronForwardOutline,
+    });
   }
 
   ngOnInit(): void {
@@ -154,8 +181,8 @@ export class IonRangeCalendarComponent implements ControlValueAccessor, OnInit {
   nextMonth(): void {
     const nextTime = addMonths(this.monthOpt.original.time, 1).valueOf();
     this.monthChange.emit({
-      oldMonth: this.calSvc.multiFormat(this.monthOpt.original.time),
-      newMonth: this.calSvc.multiFormat(nextTime),
+      oldMonth: this.calendarService.multiFormat(this.monthOpt.original.time),
+      newMonth: this.calendarService.multiFormat(nextTime),
     });
     this.monthOpt = this.createMonth(nextTime);
   }
@@ -168,8 +195,8 @@ export class IonRangeCalendarComponent implements ControlValueAccessor, OnInit {
   backMonth(): void {
     const backTime = subMonths(this.monthOpt.original.time, 1).valueOf();
     this.monthChange.emit({
-      oldMonth: this.calSvc.multiFormat(this.monthOpt.original.time),
-      newMonth: this.calSvc.multiFormat(backTime),
+      oldMonth: this.calendarService.multiFormat(this.monthOpt.original.time),
+      newMonth: this.calendarService.multiFormat(backTime),
     });
     this.monthOpt = this.createMonth(backTime);
   }
@@ -184,50 +211,52 @@ export class IonRangeCalendarComponent implements ControlValueAccessor, OnInit {
     this._view = 'days';
     const newMonth = new Date(this.monthOpt.original.time).setMonth(month).valueOf();
     this.monthChange.emit({
-      oldMonth: this.calSvc.multiFormat(this.monthOpt.original.time),
-      newMonth: this.calSvc.multiFormat(newMonth),
+      oldMonth: this.calendarService.multiFormat(this.monthOpt.original.time),
+      newMonth: this.calendarService.multiFormat(newMonth),
     });
     this.monthOpt = this.createMonth(newMonth);
   }
 
   onChanged($event: CalendarDay[]): void {
     switch (this._d.pickMode) {
-      case 'single':
-        const date = this._handleType($event[0].time);
-        this._onChanged(date);
-        this.change.emit(date);
-        break;
-
-      case 'range':
-        if ($event[0] && $event[1]) {
-          const rangeDate = {
-            from: this._handleType($event[0].time),
-            to: this._handleType($event[1].time),
-          };
-          this._onChanged(rangeDate);
-          this.change.emit(rangeDate);
-        }
-        break;
-
-      case 'multi':
-        const dates = [];
-
-        for (let i = 0; i < $event.length; i++) {
-          if ($event[i] && $event[i].time) {
-            dates.push(this._handleType($event[i].time));
-          }
-        }
-
-        this._onChanged(dates);
-        this.change.emit(dates);
-        break;
-
-      default:
+      case 'single': return this.handleSingleChange($event[0]);
+      case 'range': return this.handleRangeChange($event);
+      case 'multi': return this.handleMultiChange($event);
     }
   }
 
-  swipeEvent($event: any): void {
-    const isNext = $event.deltaX < 0;
+  private handleSingleChange($event: CalendarDay): void {
+    const date = this._handleType($event.time);
+    this._onChanged(date);
+    this.ionChange.emit(date);
+  }
+
+  private handleRangeChange($event: CalendarDay[]): void {
+    if ($event[0] && $event[1]) {
+      const rangeDate = {
+        from: this._handleType($event[0].time),
+        to: this._handleType($event[1].time),
+      };
+      this._onChanged(rangeDate);
+      this.ionChange.emit(rangeDate);
+    }
+  }
+
+  private handleMultiChange($event: CalendarDay[]): void {
+    const dates: CalendarComponentPayloadTypes[] = [];
+
+    for (const event of $event) {
+      if (event && event.time) {
+        dates.push(this._handleType(event.time));
+      }
+    }
+
+    this._onChanged(dates);
+    this.ionChange.emit(dates);
+  }
+
+  swipeEvent($event: Event): void {
+    const isNext = ($event as WheelEvent).deltaX < 0;
     if (isNext && this.canNext()) {
       this.nextMonth();
     } else if (!isNext && this.canBack()) {
@@ -235,14 +264,10 @@ export class IonRangeCalendarComponent implements ControlValueAccessor, OnInit {
     }
   }
 
-  _onChanged: Function = () => { };
-
-  _onTouched: Function = () => { };
-
   _payloadToTimeNumber(value: CalendarComponentPayloadTypes): number {
     let date: Date;
     if (typeof value === 'string') {
-      date = parse(value, this.format, new Date());
+      date = parse(value, this.format(), new Date());
     } else if (typeof value === 'number' || value instanceof Date) {
       date = new Date(value);
     } else {
@@ -265,23 +290,23 @@ export class IonRangeCalendarComponent implements ControlValueAccessor, OnInit {
         this._view = 'days';
       }
     }
-    this._d = this.calSvc.safeOpt(this._options || {});
+    this._d = this.calendarService.safeOpt(this._options || {});
   }
 
   createMonth(date: number): CalendarMonth {
-    return this.calSvc.createMonthsByPeriod(date, 1, this._d)[0];
+    return this.calendarService.createMonthsByPeriod(date, 1, this._d)[0];
   }
 
   _createCalendarDay(value?: CalendarComponentPayloadTypes | null): CalendarDay | null {
     if (!value) return null;
-    return this.calSvc.createCalendarDay(this._payloadToTimeNumber(value), this._d);
+    return this.calendarService.createCalendarDay(this._payloadToTimeNumber(value), this._d);
   }
 
   _handleType(value: number): CalendarComponentPayloadTypes {
     const date = new Date(value);
-    switch (this.type) {
+    switch (this.type()) {
       case 'string':
-        return format(date, this.format);
+        return format(date, this.format());
       case 'js-date':
         return date;
       case 'time':
@@ -301,7 +326,7 @@ export class IonRangeCalendarComponent implements ControlValueAccessor, OnInit {
     }
   }
 
-  writeValue(obj: any): void {
+  writeValue(obj: ControlValueType): void {
     this._writeValue(obj);
     if (obj) {
       if (this._calendarMonthValue[0]) {
@@ -312,15 +337,15 @@ export class IonRangeCalendarComponent implements ControlValueAccessor, OnInit {
     }
   }
 
-  registerOnChange(fn: () => {}): void {
+  registerOnChange(fn: (event: ControlValueType) => void): void {
     this._onChanged = fn;
   }
 
-  registerOnTouched(fn: () => {}): void {
+  registerOnTouched(fn: (event: ControlValueType) => void): void {
     this._onTouched = fn;
   }
 
-  _writeValue(value: any): void {
+  _writeValue(value: ControlValueType): void {
     if (!value) {
       this._calendarMonthValue = [null, null];
       return;
@@ -328,12 +353,12 @@ export class IonRangeCalendarComponent implements ControlValueAccessor, OnInit {
 
     switch (this._d.pickMode) {
       case 'single':
-        this._calendarMonthValue[0] = this._createCalendarDay(value);
+        this._calendarMonthValue[0] = this._createCalendarDay(value as CalendarComponentPayloadTypes);
         break;
 
       case 'range':
-        this._calendarMonthValue[0] = this._createCalendarDay(value.from);
-        this._calendarMonthValue[1] = this._createCalendarDay(value.to);
+        this._calendarMonthValue[0] = this._createCalendarDay((value as RangeChange).from);
+        this._calendarMonthValue[1] = this._createCalendarDay((value as RangeChange).to);
         break;
 
       case 'multi':
@@ -347,4 +372,14 @@ export class IonRangeCalendarComponent implements ControlValueAccessor, OnInit {
       default: break;
     }
   }
+
+  private setOptions(value: CalendarComponentOptions) {
+    this._options = value;
+    this.initOpt();
+    if (this.monthOpt && this.monthOpt.original) {
+      this.monthOpt = this.createMonth(this.monthOpt.original.time);
+    }
+    return value;
+  }
+
 }

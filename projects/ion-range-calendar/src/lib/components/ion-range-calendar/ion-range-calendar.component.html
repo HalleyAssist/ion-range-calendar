@@ -44,7 +44,7 @@
 </ion-range-calendar-week>
 
 <ion-range-calendar-month [componentMode]="true" [(ngModel)]="_calendarMonthValue" [month]="monthOpt"
-  [readonly]="readonly" (change)="onChanged($event)" (swipe)="swipeEvent($event)" (select)="select.emit($event)"
+  [readonly]="readonly()" (ionChange)="onChanged($event)" (swipe)="swipeEvent($event)" (select)="select.emit($event)"
   (selectStart)="selectStart.emit($event)" (selectEnd)="selectEnd.emit($event)" [pickMode]="_d.pickMode"
   [color]="_d.color">
 </ion-range-calendar-month>

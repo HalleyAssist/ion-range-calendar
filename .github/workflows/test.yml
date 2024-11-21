@@ -23,13 +23,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
+          cache: yarn
 
       - name: Install Global Packages
-        run: npm i -g @angular/cli
+        run: yarn global add @angular/cli
 
       - name: Install Packages
-        run: npm i
+        run: yarn
 
       - name: Test
         run: npm run test:ci
@@ -43,13 +43,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
+          cache: yarn
 
       - name: Install Global Packages
-        run: npm i -g @angular/cli
+        run: yarn global add @angular/cli
 
       - name: Install Packages
-        run: npm i
+        run: yarn
 
       - name: Build
         run: npm run build

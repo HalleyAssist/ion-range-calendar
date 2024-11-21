@@ -1,10 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import { IonButton, IonIcon, IonToolbar } from '@ionic/angular/standalone';
 
-import { IonRangeCalendarComponent } from './ion-range-calendar.component';
 import { CalendarWeekComponent } from '../calendar-week/calendar-week.component';
 import { MonthComponent } from '../month/month.component';
+import { IonRangeCalendarComponent } from './ion-range-calendar.component';
 
 describe('IonRangeCalendarComponent', () => {
   let component: IonRangeCalendarComponent;
@@ -12,14 +12,15 @@ describe('IonRangeCalendarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [
+      imports: [
+        FormsModule,
         IonRangeCalendarComponent,
         CalendarWeekComponent,
         MonthComponent,
-      ],
-      imports: [
-        FormsModule,
-        IonicModule.forRoot(),
+
+        IonButton,
+        IonIcon,
+        IonToolbar,
       ],
     }).compileComponents();
 

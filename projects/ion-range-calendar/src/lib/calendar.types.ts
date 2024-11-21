@@ -29,7 +29,7 @@ export interface CalendarDay {
 
 export interface CalendarMonth {
   original: CalendarOriginal;
-  days: Array<CalendarDay>;
+  days: CalendarDay[];
 }
 
 export interface DayConfig {
@@ -53,13 +53,13 @@ export interface CalendarOptions {
   to?: Date | number;
   pickMode?: PickMode;
   weekStart?: number;
-  disableWeeks?: Array<number>;
-  weekdays?: Array<string>;
+  disableWeeks?: number[];
+  weekdays?: string[];
   monthFormat?: string;
   color?: string;
   defaultTitle?: string;
   defaultSubtitle?: string;
-  daysConfig?: Array<DayConfig>;
+  daysConfig?: DayConfig[];
   /**
    * show last month & next month days fill six weeks
    */
@@ -125,3 +125,10 @@ export type CalendarComponentPayloadTypes = string | Date | number | {
   seconds: number;
   milliseconds: number;
 };
+
+export interface RangeChange {
+  from: CalendarComponentPayloadTypes;
+  to: CalendarComponentPayloadTypes;
+}
+
+export type ControlValueType = CalendarComponentPayloadTypes | CalendarComponentPayloadTypes[] | RangeChange;

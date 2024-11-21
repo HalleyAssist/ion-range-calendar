@@ -1,9 +1,10 @@
 {
   "name": "@googlproxer/ion-range-calendar",
-  "version": "18.0.0",
+  "version": "19.0.0",
   "peerDependencies": {
     "@angular/common": ">=17.0.0",
     "@angular/core": ">=17.0.0",
+    "@ionic/angular": ">=8.2.0",
     "date-fns": ">=3.0.0"
   },
   "license": "MIT",
@@ -17,7 +18,7 @@
     "url": "https://github.com/HalleyAssist/ion-range-calendar/issues"
   },
   "keywords": [
-    "Angular 18",
+    "Angular 19",
     "ion-range-calendar",
     "Ionic 8",
     "Range Calendar"

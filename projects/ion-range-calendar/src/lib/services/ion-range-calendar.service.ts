@@ -1,15 +1,15 @@
-import { Inject, Injectable, Optional } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 
 import { addDays, addMonths, format, getDaysInMonth, isAfter, isBefore, isSameDay, isToday, isWithinInterval, subDays } from 'date-fns';
 
 import {
-  CalendarOriginal,
   CalendarDay,
-  CalendarMonth,
   CalendarModalOptions,
+  CalendarMonth,
+  CalendarOriginal,
   CalendarResult,
   DayConfig,
-} from '../calendar.model';
+} from '../calendar.types';
 
 import { defaults } from '../config';
 
@@ -20,25 +20,14 @@ export class IonRangeCalendarService {
 
   public opts: CalendarModalOptions;
 
-  private readonly defaultOpts: CalendarModalOptions;
+  private readonly defaultOpts = inject(DEFAULT_CALENDAR_OPTIONS, { optional: true });
 
-  constructor(
-    @Optional()
-    @Inject(DEFAULT_CALENDAR_OPTIONS)
-    defaultOpts: CalendarModalOptions
-  ) {
-    this.defaultOpts = defaultOpts;
-  }
-
-  get DEFAULT_STEP() {
-    return 12;
-  }
+  readonly DEFAULT_STEP = 12;
 
   safeOpt(calendarOptions: Partial<CalendarModalOptions> = {}): CalendarModalOptions {
     const _disableWeeks: number[] = [];
     const _daysConfig: DayConfig[] = [];
-    let {
-      from = new Date(),
+    const {
       to = 0,
       weekStart = 0,
       step = this.DEFAULT_STEP,
@@ -68,6 +57,8 @@ export class IonRangeCalendarService {
       defaultEndDateToStartDate = true,
       maxRange = 0,
     } = { ...this.defaultOpts, ...calendarOptions };
+
+    let from = this.defaultOpts?.from || calendarOptions.from || new Date();
 
     //  if from is not provided, but a default range is, set from to the default range from
     if (typeof calendarOptions.from === 'undefined' && calendarOptions.defaultDateRange) {
@@ -209,7 +200,7 @@ export class IonRangeCalendarService {
   }
 
   createCalendarMonth(original: CalendarOriginal, opt: CalendarModalOptions): CalendarMonth {
-    const days: Array<CalendarDay> = new Array(6).fill(null);
+    const days: CalendarDay[] = new Array(6).fill(null);
     const len = original.howManyDays;
     for (let i = original.firstWeek; i < len + original.firstWeek; i++) {
       const itemTime = new Date(original.year, original.month, i - original.firstWeek + 1).getTime();
@@ -250,8 +241,8 @@ export class IonRangeCalendarService {
     };
   }
 
-  createMonthsByPeriod(startTime: number, monthsNum: number, opt: CalendarModalOptions): Array<CalendarMonth> {
-    const _array: Array<CalendarMonth> = [];
+  createMonthsByPeriod(startTime: number, monthsNum: number, opt: CalendarModalOptions): CalendarMonth[] {
+    const _array: CalendarMonth[] = [];
 
     const _start = new Date(startTime);
     const _startMonth = new Date(_start.getFullYear(), _start.getMonth(), 1).getTime();

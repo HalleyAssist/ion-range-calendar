@@ -1,8 +1,8 @@
-<div [class]="color">
+<div [class]="color()">
   @if (!_isRange) {
 
   <div class="days-box">
-    @for (day of month.days; track $index) {
+    @for (day of month().days; track $index) {
 
     <div class="days">
       @if (day) {
@@ -25,7 +25,7 @@
   } @else {
 
   <div class="days-box">
-    @for (day of month.days; track $index) {
+    @for (day of month().days; track $index) {
 
     <div class="days" [class.startSelection]="isStartSelection(day)" [class.endSelection]="isEndSelection(day)"
       [class.is-first-wrap]="day?.isFirst" [class.is-last-wrap]="day?.isLast" [class.between]="isBetween(day)">

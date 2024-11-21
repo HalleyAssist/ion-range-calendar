@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 
-import { CalendarMonth } from '../../calendar.model';
+import { CalendarMonth } from '../../calendar.types';
 import { defaults } from '../../config';
 
 @Component({
@@ -9,27 +9,15 @@ import { defaults } from '../../config';
   templateUrl: 'month-picker.component.html',
 })
 export class MonthPickerComponent {
-  @Input() month: CalendarMonth;
-  @Input() color = defaults.COLOR;
-  @Output() select: EventEmitter<number> = new EventEmitter();
+  readonly month = input<CalendarMonth>(undefined);
+  readonly color = input(defaults.COLOR);
+  readonly monthFormat = input(defaults.MONTH_FORMAT, { transform: this.setMonthFormat });
+
+  select = output<number>();
 
   _thisMonth = new Date();
-  _monthFormat = defaults.MONTH_FORMAT;
 
   MONTH_FORMAT = 'MMMM';
-
-  @Input()
-  set monthFormat(value: string[]) {
-    if (Array.isArray(value) && value.length === 12) {
-      this._monthFormat = value;
-    }
-  }
-
-  get monthFormat(): string[] {
-    return this._monthFormat;
-  }
-
-  constructor() { }
 
   _onSelect(month: number): void {
     this.select.emit(month);
@@ -37,5 +25,12 @@ export class MonthPickerComponent {
 
   getDate(month: number) {
     return new Date(this._thisMonth.getFullYear(), month, 1);
+  }
+
+  private setMonthFormat(value: string[]): string[] {
+    if (value && value.length === 12) {
+      return [...value];
+    }
+    return defaults.MONTH_FORMAT;
   }
 }

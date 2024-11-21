@@ -3,8 +3,6 @@
 [![NPM version][npm-image]][npm-url]
 [![MIT License][license-image]][license-url]
 
-Forked from : <https://github.com/hsuanxyz/ion-range-calendar>
-
 * Supports date range.
 * Supports multi date.
 * Supports HTML components.
@@ -15,69 +13,29 @@ Forked from : <https://github.com/hsuanxyz/ion-range-calendar>
 
 ## Supports
 
-* `"@ionic/angular": ">=7.0.0"`
+* `"@ionic/angular": ">=8.2.0"`
 
 ## Usage
 
 ### Installation
 
 ```bash
- npm i @googlproxer/ion-range-calendar date-fns date-fns-tz
+ npm i @googlproxer/ion-range-calendar date-fns @date-fns/tz
  ```
 
 ### Import module
 
 ```typescript
-import { NgModule } from '@angular/core';
-import { IonicApp, IonicModule } from '@ionic/angular';
-import { MyApp } from './app.component';
-...
-import { IonRangeCalendarModule } from '@googlproxer/ion-range-calendar';
+import { Component } from '@angular/core';
+import { IonRangeCalendarComponent } from '@googlproxer/ion-range-calendar';
 
-@NgModule({
-  declarations: [
-    MyApp,
-    ...
-  ],
+@Component({
+  ...,
   imports: [
-    IonicModule.forRoot(),
-    IonRangeCalendarModule
-  ],
-  bootstrap: [MyApp],
-  ...
-})
-export class AppModule {}
-```
-
-### Change Defaults
-
-```typescript
-import { NgModule } from '@angular/core';
-import { IonicApp, IonicModule } from 'ionic-angular';
-import { MyApp } from './app.component';
-...
-import { IonRangeCalendarModule } from "ion-range-calendar";
-
-@NgModule({
-  declarations: [
-    MyApp,
-    ...
-  ],
-  imports: [
-    IonicModule.forRoot(MyApp),
-    // See CalendarComponentOptions for options
-    IonRangeCalendarModule.forRoot({
-      doneLabel: 'Save',
-      closeIcon: true
-    })
-  ],
-  bootstrap: [IonicApp],
-  entryComponents: [
-    MyApp,
-    ...
+    IonRangeCalendarComponent
   ]
 })
-export class AppModule {}
+export class AppComponent {}
 ```
 
 ## As Component
@@ -85,16 +43,21 @@ export class AppModule {}
 ### Basic
 
 ```html
-<ion-range-calendar [(ngModel)]="date" (change)="onChange($event)" [type]="type" [format]="'yyyy-MM-dd'">
+<ion-range-calendar [(ngModel)]="date" (ionChange)="onChange($event)" [type]="type" [format]="'yyyy-MM-dd'">
 </ion-range-calendar>
 ```
 
 ```typescript
 import { Component } from '@angular/core';
+import { IonRangeCalendarComponent } from '@googlproxer/ion-range-calendar';
 
 @Component({
   selector: 'page-home',
-  templateUrl: 'home.html'
+  templateUrl: 'home.html',
+  standalone: true,
+  imports: [
+    IonRangeCalendarComponent
+  ]
 })
 export class HomePage {
   date: string;
@@ -117,11 +80,15 @@ export class HomePage {
 
 ```typescript
 import { Component } from '@angular/core';
-import { CalendarComponentOptions } from '@googlproxer/ion-range-calendar';
+import { CalendarComponentOptions, IonRangeCalendarComponent } from '@googlproxer/ion-range-calendar';
 
 @Component({
   selector: 'page-home',
-  templateUrl: 'home.html'
+  templateUrl: 'home.html',
+  standalone: true,
+  imports: [
+    IonRangeCalendarComponent
+  ]
 })
 export class HomePage {
   dateRange: { from: string; to: string; };
@@ -144,11 +111,15 @@ export class HomePage {
 
 ```typescript
 import { Component } from '@angular/core';
-import { CalendarComponentOptions } from '@googlproxer/ion-range-calendar';
+import { CalendarComponentOptions, IonRangeCalendarComponent } from '@googlproxer/ion-range-calendar';
 
 @Component({
   selector: 'page-home',
-  templateUrl: 'home.html'
+  templateUrl: 'home.html',
+  standalone: true,
+  imports: [
+    IonRangeCalendarComponent
+  ]
 })
 export class HomePage {
   dateMulti: string[];
@@ -173,20 +144,20 @@ export class HomePage {
 
 ### Output Properties
 
-| Name        | Type           | Description                |
-| ----------- | -------------- | -------------------------- |
-| change      | `EventEmitter` | event for model change     |
-| monthChange | `EventEmitter` | event for month change     |
-| select      | `EventEmitter` | event for day select       |
-| selectStart | `EventEmitter` | event for day select       |
-| selectEnd   | `EventEmitter` | event for day select       |
+| Name           | Type           | Description                |
+| -------------- | -------------- | -------------------------- |
+| ionChange      | `EventEmitter` | event for model change     |
+| monthChange    | `EventEmitter` | event for month change     |
+| select         | `EventEmitter` | event for day select       |
+| selectStart    | `EventEmitter` | event for day select       |
+| selectEnd      | `EventEmitter` | event for day select       |
 
 ### CalendarComponentOptions
 
 | Name              | Type                      | Default                                                                                | Description                                       |
 | ----------------- | ------------------------- | -------------------------------------------------------------------------------------- | ------------------------------------------------- |
-| from              | `Date`                    | `new Date()`                                                                           | start date                                        |
-| to                | `Date`                    | 0 (Infinite)                                                                           | end date                                          |
+| from              | `Date` or `number`        | `new Date()`                                                                           | start date                                        |
+| to                | `Date` or `number`        | 0 (Infinite)                                                                           | end date                                          |
 | color             | `string`                  | `'primary'`                                                                            | 'primary', 'secondary', 'danger', 'light', 'dark' |
 | pickMode          | `string`                  | `single`                                                                               | 'multi', 'range', 'single'                        |
 | showToggleButtons | `boolean`                 | `true`                                                                                 | show toggle buttons                               |
@@ -203,13 +174,58 @@ export class HomePage {
 
 ## As Modal
 
+In order to use the modal, you will need to set `useSetInputAPI: true` in you Application bootstrapping.
+
+```typescript
+/** main.ts */
+import { enableProdMode } from '@angular/core';
+import { bootstrapApplication } from '@angular/platform-browser';
+
+import { AppComponent } from './app/app.component';
+import { environment } from './environments/environment';
+
+import { provideIonicAngular } from '@ionic/angular/standalone';
+
+if (environment.production) {
+  enableProdMode();
+}
+
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideIonicAngular({
+      useSetInputAPI: true, //  required for input signals on controller based modals.
+    })
+  ]
+})
+  .catch(err => console.error(err));
+```
+
+If you are still using `NgModule` , you can use the `provideIonicAngular` function to provide the `IonicAngular` module.
+
+```typescript
+import { NgModule } from '@angular/core';
+import { provideIonicAngular } from '@ionic/angular/standalone';
+import { AppComponent } from './app.component';
+
+@NgModule({
+  ...,
+  bootstrap: [AppComponent],
+  providers: [
+    provideIonicAngular({
+      useSetInputAPI: true, //  required for input signals on controller based modals.
+    })
+  ]
+})
+export class AppModule {}
+```
+
 ### Basic Modal
 
 Import ion-range-calendar in component controller.
 
 ```typescript
 import { Component } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { ModalController } from '@ionic/angular/standalone';
 import {
   CalendarModal,
   CalendarModalOptions,
@@ -394,18 +410,18 @@ openCalendar() {
 
 | Name                      | Type                       | Default                               | Description                                                |
 | ------------------------- | -------------------------- | ------------------------------------- | ---------------------------------------------------------- |
-| from                      | `Date`                     | `new Date()`                          | start date                                                 |
-| to                        | `Date`                     | 0 (Infinite)                          | end date                                                   |
+| from                      | `Date` or `number`         | `new Date()`                          | start date                                                 |
+| to                        | `Date` or `number`         | 0 (Infinite)                          | end date                                                   |
 | title                     | `string`                   | `'CALENDAR'`                          | title                                                      |
 | color                     | `string`                   | `'primary'`                           | 'primary', 'secondary', 'danger', 'light', 'dark'          |
-| defaultScrollTo           | `Date`                     | none                                  | let the view scroll to the default date                    |
-| defaultDate               | `Date`                     | none                                  | default date data, apply to single                         |
-| defaultDates              | `Array<Date>`              | none                                  | default dates data, apply to multi                         |
-| defaultDateRange          | `{ from: Date, to: Date }` | none                                  | default date-range data, apply to range                    |
+| defaultScrollTo           | `Date`                     | undefined                             | let the view scroll to the default date                    |
+| defaultDate               | `Date`                     | undefined                             | default date data, apply to single                         |
+| defaultDates              | `Array<Date>`              | undefined                             | default dates data, apply to multi                         |
+| defaultDateRange          | `{ from: Date, to: Date }` | undefined                             | default date-range data, apply to range                    |
 | defaultTitle              | `string`                   | ''                                    | default title in days                                      |
 | defaultSubtitle           | `string`                   | ''                                    | default subtitle in days                                   |
 | cssClass                  | `string`                   | `''`                                  | Additional classes for custom styles, separated by spaces. |
-| canBackwardsSelected      | `boolean`                  | `false`                               | can backwards selected                                     |
+| canBackwardsSelected      | `boolean`                  | `false`                               | Allow selection to any date before `to`                    |
 | pickMode                  | `string`                   | `single`                              | 'multi', 'range', 'single'                                 |
 | disableWeeks              | `Array<number>`            | `[]`                                  | week to be disabled (0-6)                                  |
 | closeLabel                | `string`                   | `CANCEL`                              | cancel button label                                        |
@@ -439,14 +455,14 @@ openCalendar() {
 
 #### DaysConfig
 
-| Name     | Type      | Default  | Description                           |
-| -------- | --------- | -------- | ------------------------------------- |
-| cssClass | `string`  | `''`     | separated by spaces                   |
-| date     | `Date`    | required | configured days                       |
-| marked   | `boolean` | false    | highlight color                       |
-| disable  | `boolean` | false    | disable                               |
-| title    | `string`  | none     | displayed title eg: `'today'`         |
-| subTitle | `string`  | none     | subTitle subTitle eg: `'New Year\'s'` |
+| Name     | Type      | Default   | Description                           |
+| -------- | --------- | --------- | ------------------------------------- |
+| cssClass | `string`  | `''`      | separated by spaces                   |
+| date     | `Date`    | required  | configured days                       |
+| marked   | `boolean` | false     | highlight color                       |
+| disable  | `boolean` | false     | disable                               |
+| title    | `string`  | undefined | displayed title eg: `'today'`         |
+| subTitle | `string`  | undefined | subTitle subTitle eg: `'New Year\'s'` |
 
 ### CalendarResult
 

@@ -1,9 +1,9 @@
-import { Component, ChangeDetectorRef, Input, Output, EventEmitter, forwardRef, AfterViewInit, Provider } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, forwardRef, inject, input, output, Provider } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { IonRangeCalendarService } from '../../services/ion-range-calendar.service';
 
-import { CalendarDay, CalendarMonth, PickMode } from '../../calendar.model';
+import { CalendarDay, CalendarMonth, ControlValueType, PickMode } from '../../calendar.types';
 
 import { defaults } from '../../config';
 
@@ -20,37 +20,36 @@ export const MONTH_VALUE_ACCESSOR: Provider = {
   providers: [MONTH_VALUE_ACCESSOR],
   styleUrls: ['./month.component.scss'],
   templateUrl: 'month.component.html',
-  host: { '[class.component-mode]': 'componentMode' },
+  host: { '[class.component-mode]': 'componentMode()' },
+  standalone: true,
 })
 export class MonthComponent implements ControlValueAccessor, AfterViewInit {
 
-  @Input() componentMode = false;
-  @Input() month: CalendarMonth;
-  @Input() pickMode: PickMode;
-  @Input() isSaveHistory: boolean;
-  @Input() readonly = false;
-  @Input() color: string = defaults.COLOR;
+  readonly componentMode = input(false);
+  readonly month = input<CalendarMonth>();
+  readonly pickMode = input<PickMode>();
+  readonly isSaveHistory = input<boolean>(undefined);
+  readonly readonly = input(false);
+  readonly color = input<string>(defaults.COLOR);
 
-  @Output() change: EventEmitter<CalendarDay[]> = new EventEmitter();
-  @Output() select: EventEmitter<CalendarDay> = new EventEmitter();
-  @Output() selectStart: EventEmitter<CalendarDay> = new EventEmitter();
-  @Output() selectEnd: EventEmitter<CalendarDay> = new EventEmitter();
+  ionChange = output<CalendarDay[]>();
+  select = output<CalendarDay>();
+  selectStart = output<CalendarDay>();
+  selectEnd = output<CalendarDay>();
 
-  _date: Array<CalendarDay | null> = [null, null];
+  _date: (CalendarDay | null)[] = [null, null];
   _isInit = false;
-  _onChanged: Function;
-  _onTouched: Function;
+  _onChanged: (event: ControlValueType) => void;
+  _onTouched: (event: ControlValueType) => void;
 
   readonly DAY_DATE_FORMAT = 'MMMM dd, yyyy';
 
   get _isRange(): boolean {
-    return this.pickMode === 'range';
+    return this.pickMode() === 'range';
   }
 
-  constructor(
-    public ref: ChangeDetectorRef,
-    public service: IonRangeCalendarService,
-  ) { }
+  public ref = inject(ChangeDetectorRef);
+  public service = inject(IonRangeCalendarService);
 
   ngAfterViewInit(): void {
     this._isInit = true;
@@ -66,17 +65,17 @@ export class MonthComponent implements ControlValueAccessor, AfterViewInit {
     }
   }
 
-  registerOnChange(fn: any): void {
+  registerOnChange(fn: (event: ControlValueType) => void): void {
     this._onChanged = fn;
   }
 
-  registerOnTouched(fn: any): void {
+  registerOnTouched(fn: (event: ControlValueType) => void): void {
     this._onTouched = fn;
   }
 
   isEndSelection(day: CalendarDay): boolean {
     if (!day) return false;
-    if (this.pickMode !== 'range' || !this._isInit || this._date[1] === null) {
+    if (this.pickMode() !== 'range' || !this._isInit || this._date[1] === null) {
       return false;
     }
 
@@ -90,7 +89,7 @@ export class MonthComponent implements ControlValueAccessor, AfterViewInit {
   isBetween(day: CalendarDay): boolean {
     if (!day) return false;
 
-    if (this.pickMode !== 'range' || !this._isInit) {
+    if (this.pickMode() !== 'range' || !this._isInit) {
       return false;
     }
 
@@ -103,7 +102,7 @@ export class MonthComponent implements ControlValueAccessor, AfterViewInit {
 
   isStartSelection(day: CalendarDay): boolean {
     if (!day) return false;
-    if (this.pickMode !== 'range' || !this._isInit || this._date[0] === null) {
+    if (this.pickMode() !== 'range' || !this._isInit || this._date[0] === null) {
       return false;
     }
 
@@ -112,7 +111,7 @@ export class MonthComponent implements ControlValueAccessor, AfterViewInit {
 
   isSelected(time: number): boolean {
     if (Array.isArray(this._date)) {
-      if (this.pickMode !== 'multi') {
+      if (this.pickMode() !== 'multi') {
         if (this._date[0] !== null) {
           return time === this._date[0].time;
         }
@@ -128,15 +127,15 @@ export class MonthComponent implements ControlValueAccessor, AfterViewInit {
   }
 
   onSelected(item: CalendarDay): void {
-    if (this.readonly) return;
+    if (this.readonly()) return;
     this.select.emit(item);
-    if (this.pickMode === 'single') {
+    if (this.pickMode() === 'single') {
       this._date[0] = item;
-      this.change.emit(this._date);
+      this.ionChange.emit(this._date);
       return;
     }
 
-    if (this.pickMode === 'range') {
+    if (this.pickMode() === 'range') {
       // max range as days in milliseconds
       const maxRange = (this.service.opts.maxRange - 1) * 86400000;
       // if start not selected, set to this day
@@ -191,11 +190,11 @@ export class MonthComponent implements ControlValueAccessor, AfterViewInit {
         this.selectEnd.emit(this._date[1]);
       }
 
-      this.change.emit(this._date);
+      this.ionChange.emit(this._date);
       return;
     }
 
-    if (this.pickMode === 'multi') {
+    if (this.pickMode() === 'multi') {
       const index = this._date.findIndex(e => e !== null && e.time === item.time);
 
       if (index === -1) {
@@ -203,7 +202,7 @@ export class MonthComponent implements ControlValueAccessor, AfterViewInit {
       } else {
         this._date.splice(index, 1);
       }
-      this.change.emit(this._date.filter(e => e !== null));
+      this.ionChange.emit(this._date.filter(e => e !== null));
     }
   }
 

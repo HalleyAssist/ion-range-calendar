@@ -1,13 +1,11 @@
-import { ComponentFixture, TestBed } from "@angular/core/testing";
-import { FormsModule } from "@angular/forms";
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
 
-import { IonicModule } from "@ionic/angular";
+import { addDays, parse, startOfDay, subDays } from 'date-fns';
 
-import { addDays, parse, startOfDay, subDays } from "date-fns";
+import { CalendarDay, CalendarModalOptions, CalendarMonth } from '../../calendar.types';
 
-import { CalendarDay, CalendarModalOptions, CalendarMonth } from "../../calendar.model";
-
-import { MonthComponent } from "./month.component";
+import { MonthComponent } from './month.component';
 
 describe('MonthComponent', () => {
   let component: MonthComponent;
@@ -19,7 +17,7 @@ describe('MonthComponent', () => {
   const from = subDays(startOfDay(now), 6);
   const to = startOfDay(now);
 
-  let opts: CalendarModalOptions = {
+  const opts: CalendarModalOptions = {
     pickMode: 'range',
     title: 'Select Date Range',
     cssClass: 'calendar',
@@ -47,12 +45,9 @@ describe('MonthComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [
-        MonthComponent,
-      ],
       imports: [
         FormsModule,
-        IonicModule.forRoot(),
+        MonthComponent,
       ],
     }).compileComponents();
 
@@ -63,8 +58,8 @@ describe('MonthComponent', () => {
     //  create month
     month = component.service.createMonthsByPeriod(new Date('2022-04-01').valueOf(), 1, opts)[0];
     //  set required component inputs
-    component.month = month;
-    component.pickMode = 'range';
+    fixture.componentRef.setInput('month', month);
+    fixture.componentRef.setInput('pickMode', 'range');
     //  detect changes
     fixture.detectChanges();
   });
@@ -158,4 +153,4 @@ describe('MonthComponent', () => {
     });
 
   });
-})
+});

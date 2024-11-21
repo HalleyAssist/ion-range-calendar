@@ -26,7 +26,7 @@
 
   <ion-content>
 
-    <ion-range-calendar [(ngModel)]="data" (change)="onChange($event)" [type]="'js-date'" [format]="'yyyy-MM-dd'"
+    <ion-range-calendar [(ngModel)]="data" (ionChange)="onChange($event)" [type]="'js-date'" [format]="'yyyy-MM-dd'"
       [options]="options">
     </ion-range-calendar>
 

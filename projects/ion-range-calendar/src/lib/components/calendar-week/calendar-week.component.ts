@@ -1,42 +1,43 @@
-import { Component, Input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { defaults } from '../../config';
+
+import { IonToolbar } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'ion-range-calendar-week',
   styleUrls: ['./calendar-week.component.scss'],
   templateUrl: 'calendar-week-component.html',
+  imports: [
+    IonToolbar,
+  ]
 })
 export class CalendarWeekComponent {
-  _weekArray: string[] = defaults.WEEKS_FORMAT;
-  _displayWeekArray: string[] = this._weekArray;
-  _weekStart = 0;
-  @Input() color: string = defaults.COLOR;
 
-  constructor() { }
+  readonly color = input(defaults.COLOR);
 
-  @Input()
-  set weekArray(value: string[]) {
-    if (value && value.length === 7) {
-      this._weekArray = [...value];
-      this.adjustSort();
-    }
-  }
+  readonly weekArray = input(defaults.WEEKS_FORMAT, { transform: this.setWeekArray });
 
-  @Input()
-  set weekStart(value: number) {
-    if (value === 0 || value === 1) {
-      this._weekStart = value;
-      this.adjustSort();
-    }
-  }
+  readonly weekStart = input(0, { transform: this.setWeekStart });
 
-  adjustSort(): void {
-    if (this._weekStart === 1) {
-      const cacheWeekArray = [...this._weekArray];
+  readonly displayWeekArray = computed<string[]>(() => {
+    if (this.weekStart() === 1) {
+      const cacheWeekArray = [...this.weekArray()];
       cacheWeekArray.push(cacheWeekArray.shift());
-      this._displayWeekArray = [...cacheWeekArray];
-    } else if (this._weekStart === 0) {
-      this._displayWeekArray = [...this._weekArray];
+      return [...cacheWeekArray];
     }
+    return this.weekArray();
+  });
+
+  private setWeekArray(value: string[]): string[] {
+    if (value && value.length === 7) {
+      return [...value];
+    }
+    return defaults.WEEKS_FORMAT;
   }
+
+  private setWeekStart(value: number): number {
+    // return 0 or 1, default 0
+    return value === 1 ? 1 : 0;
+  }
+
 }
