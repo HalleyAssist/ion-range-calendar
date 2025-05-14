@@ -3,10 +3,14 @@
     <ion-toolbar>
       <ion-title> Example App </ion-title>
 
-
       <ion-buttons slot="end">
         <ion-item>
-          <ion-select label="Mode" [(ngModel)]="mode" placeholder="Select Mode" interface="popover">
+          <ion-select
+            label="Mode"
+            [(ngModel)]="mode"
+            placeholder="Select Mode"
+            interface="popover"
+          >
             <ion-select-option value="single"> Single </ion-select-option>
             <ion-select-option value="multi"> Multi </ion-select-option>
             <ion-select-option value="range"> Range </ion-select-option>
@@ -25,10 +29,13 @@
   </ion-header>
 
   <ion-content>
-
-    <ion-range-calendar [(ngModel)]="data" (ionChange)="onChange($event)" [type]="'js-date'" [format]="'yyyy-MM-dd'"
-      [options]="options">
+    <ion-range-calendar
+      [(ngModel)]="data"
+      (ionChange)="onChange($event)"
+      [type]="'js-date'"
+      [format]="'yyyy-MM-dd'"
+      [options]="options"
+    >
     </ion-range-calendar>
-
   </ion-content>
 </ion-app>

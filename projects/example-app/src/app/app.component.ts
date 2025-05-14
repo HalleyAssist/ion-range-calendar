@@ -13,7 +13,7 @@ import {
   IonSelectOption,
   IonTitle,
   IonToolbar,
-  ModalController
+  ModalController,
 } from '@ionic/angular/standalone';
 
 import { startOfDay, subDays } from 'date-fns';
@@ -21,7 +21,11 @@ import { startOfDay, subDays } from 'date-fns';
 import { ionChange } from 'projects/ion-range-calendar/src/lib/components/ion-range-calendar/ion-range-calendar.component';
 import { IonRangeCalendarComponent } from '../../../ion-range-calendar/src/lib/components/ion-range-calendar/ion-range-calendar.component';
 
-import { CalendarModal, CalendarModalOptions, PickMode } from 'projects/ion-range-calendar/src/public-api';
+import {
+  CalendarModal,
+  CalendarModalOptions,
+  PickMode,
+} from 'projects/ion-range-calendar/src/public-api';
 
 @Component({
   selector: 'app-root',
@@ -43,12 +47,14 @@ import { CalendarModal, CalendarModalOptions, PickMode } from 'projects/ion-rang
     IonSelectOption,
     IonTitle,
     IonToolbar,
-  ]
+  ],
 })
 export class AppComponent {
-
   public date? = new Date();
-  public dateRange: { from?: Date, to?: Date } = { from: new Date(), to: new Date() };
+  public dateRange: { from?: Date; to?: Date } = {
+    from: new Date(),
+    to: new Date(),
+  };
   public dates = [new Date(), new Date()];
 
   public mode: PickMode = 'range';
@@ -68,6 +74,7 @@ export class AppComponent {
     closeIcon: true,
     defaultScrollTo: this.from,
     maxRange: 28,
+    clearResetsToDefault: true,
   };
 
   private modalCtrl = inject(ModalController);
@@ -94,7 +101,7 @@ export class AppComponent {
         this.date = value as Date;
         break;
       case 'range':
-        this.dateRange = value as { from: Date, to: Date };
+        this.dateRange = value as { from: Date; to: Date };
         break;
       case 'multi':
         this.dates = value as Date[];
@@ -130,5 +137,4 @@ export class AppComponent {
         break;
     }
   }
-
 }

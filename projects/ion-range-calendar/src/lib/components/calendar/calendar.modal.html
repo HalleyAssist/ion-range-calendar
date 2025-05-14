@@ -1,13 +1,21 @@
 <ion-header>
   <ion-toolbar [color]="_d.color">
     <ion-buttons slot="start">
-      <ion-button type='button' slot="icon-only" fill="clear" (click)="onCancel()"
-        [title]="_d.closeTitle || _d.closeLabel">
+      <ion-button
+        type="button"
+        slot="icon-only"
+        fill="clear"
+        (click)="onCancel()"
+        [title]="_d.closeTitle || _d.closeLabel"
+      >
         @if (_d.closeLabel) {
-        <ion-label>{{ _d.closeLabel }}</ion-label>
+          <ion-label>{{ _d.closeLabel }}</ion-label>
         }
         @if (_d.closeIcon) {
-        <ion-icon [slot]="_d.closeLabel ? 'start' : 'icon-only'" name="close"></ion-icon>
+          <ion-icon
+            [slot]="_d.closeLabel ? 'start' : 'icon-only'"
+            name="close"
+          ></ion-icon>
         }
       </ion-button>
     </ion-buttons>
@@ -16,54 +24,84 @@
 
     <ion-buttons slot="end">
       @if (!!_d.clearLabel || !!_d.clearIcon) {
-      <ion-button type='button' slot="icon-only" fill="clear" [disabled]="!canClear()" (click)="clear()"
-        [title]="_d.clearTitle || _d.clearLabel">
-        @if (_d.clearLabel) {
-        <ion-label>{{ _d.clearLabel }}</ion-label>
-        }
-        @if (_d.clearIcon) {
-        <ion-icon [slot]="_d.clearLabel ? 'end' : 'icon-only'" name="refresh"></ion-icon>
-        }
-      </ion-button>
+        <ion-button
+          type="button"
+          slot="icon-only"
+          fill="clear"
+          [disabled]="!canClear()"
+          (click)="clear()"
+          [title]="_d.clearTitle || _d.clearLabel"
+        >
+          @if (_d.clearLabel) {
+            <ion-label>{{ _d.clearLabel }}</ion-label>
+          }
+          @if (_d.clearIcon) {
+            <ion-icon
+              [slot]="_d.clearLabel ? 'end' : 'icon-only'"
+              name="refresh"
+            ></ion-icon>
+          }
+        </ion-button>
       }
       @if (!_d.autoDone) {
-      <ion-button type='button' slot="icon-only" fill="clear" [disabled]="!canDone()" (click)="done()"
-        [title]="_d.doneTitle || _d.doneLabel">
-        @if (_d.doneLabel) {
-        <ion-label>{{ _d.doneLabel }}</ion-label>
-        }
-        @if (_d.doneIcon) {
-        <ion-icon [slot]="_d.doneLabel ? 'end' : 'icon-only'" name="checkmark"></ion-icon>
-        }
-      </ion-button>
+        <ion-button
+          type="button"
+          slot="icon-only"
+          fill="clear"
+          [disabled]="!canDone()"
+          (click)="done()"
+          [title]="_d.doneTitle || _d.doneLabel"
+        >
+          @if (_d.doneLabel) {
+            <ion-label>{{ _d.doneLabel }}</ion-label>
+          }
+          @if (_d.doneIcon) {
+            <ion-icon
+              [slot]="_d.doneLabel ? 'end' : 'icon-only'"
+              name="checkmark"
+            ></ion-icon>
+          }
+        </ion-button>
       }
     </ion-buttons>
   </ion-toolbar>
 
   <ng-content select="[sub-header]"></ng-content>
 
-  <ion-range-calendar-week [color]="_d.color" [weekArray]="_d.weekdays" [weekStart]="_d.weekStart">
+  <ion-range-calendar-week
+    [color]="_d.color"
+    [weekArray]="_d.weekdays"
+    [weekStart]="_d.weekStart"
+  >
   </ion-range-calendar-week>
-
 </ion-header>
 
-<ion-content (ionScroll)="onScroll($event)" class="calendar-page" [scrollEvents]="true"
-  [ngClass]="{'multi-selection': _d.pickMode === 'multi'}">
-
+<ion-content
+  (ionScroll)="onScroll($event)"
+  class="calendar-page"
+  [scrollEvents]="true"
+  [ngClass]="{ 'multi-selection': _d.pickMode === 'multi' }"
+>
   <div #months>
     @for (month of calendarMonths; track month.original.time; let i = $index) {
-    <div class="month-box" [attr.id]="'month-' + i">
-      <h4 class="text-center month-title">{{ _monthFormat(month.original.date) }}</h4>
-      <ion-range-calendar-month [month]="month" [pickMode]="_d.pickMode" [isSaveHistory]="_d.isSaveHistory"
-        [color]="_d.color" (ionChange)="onChange($event)" [(ngModel)]="datesTemp">
-      </ion-range-calendar-month>
-    </div>
+      <div class="month-box" [attr.id]="'month-' + i">
+        <h4 class="text-center month-title">
+          {{ _monthFormat(month.original.date) }}
+        </h4>
+        <ion-range-calendar-month
+          [month]="month"
+          [pickMode]="_d.pickMode"
+          [isSaveHistory]="_d.isSaveHistory"
+          [color]="_d.color"
+          (ionChange)="onChange($event)"
+          [(ngModel)]="datesTemp"
+        >
+        </ion-range-calendar-month>
+      </div>
     }
-
   </div>
 
   <ion-infinite-scroll threshold="25%" (ionInfinite)="nextMonth($event)">
     <ion-infinite-scroll-content></ion-infinite-scroll-content>
   </ion-infinite-scroll>
-
 </ion-content>

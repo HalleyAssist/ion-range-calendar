@@ -8,7 +8,7 @@ import {
   OnInit,
   Renderer2,
   input,
-  viewChild
+  viewChild,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
@@ -25,15 +25,31 @@ import {
   IonToolbar,
   ModalController,
 } from '@ionic/angular/standalone';
-import { IonContentCustomEvent, IonInfiniteScrollCustomEvent, ScrollDetail } from '@ionic/core';
+import {
+  IonContentCustomEvent,
+  IonInfiniteScrollCustomEvent,
+  ScrollDetail,
+} from '@ionic/core';
 import { addIcons } from 'ionicons';
 import { checkmark, close, refresh } from 'ionicons/icons';
 
-import { CalendarDay, CalendarModalOptions, CalendarMonth, DefaultDate } from '../../calendar.types';
+import {
+  CalendarDay,
+  CalendarModalOptions,
+  CalendarMonth,
+  DefaultDate,
+} from '../../calendar.types';
 
 import { IonRangeCalendarService } from '../../services/ion-range-calendar.service';
 
-import { addMonths, differenceInMonths, format, isAfter, startOfDay, subMonths } from 'date-fns';
+import {
+  addMonths,
+  differenceInMonths,
+  format,
+  isAfter,
+  startOfDay,
+  subMonths,
+} from 'date-fns';
 
 import { CalendarWeekComponent } from '../calendar-week/calendar-week.component';
 import { MonthComponent } from '../month/month.component';
@@ -60,12 +76,9 @@ const NUM_OF_MONTHS_TO_CREATE = 3;
     IonInfiniteScroll,
     IonInfiniteScrollContent,
   ],
-  providers: [
-    IonRangeCalendarService,
-  ]
+  providers: [IonRangeCalendarService],
 })
 export class CalendarModalComponent implements OnInit, AfterViewInit {
-
   readonly options = input<CalendarModalOptions>({});
 
   readonly content = viewChild(IonContent);
@@ -88,7 +101,7 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
     public _elementRef: ElementRef,
     public modalCtrl: ModalController,
     public ref: ChangeDetectorRef,
-    public calSvc: IonRangeCalendarService
+    public calSvc: IonRangeCalendarService,
   ) {
     addIcons({
       close,
@@ -119,7 +132,7 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
     this.calendarMonths = this.calSvc.createMonthsByPeriod(
       new Date(this._d.defaultScrollTo || this._d.from).valueOf(),
       this.step,
-      this._d
+      this._d,
     );
   }
 
@@ -128,22 +141,33 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
     switch (pickMode) {
       case 'single':
         if (defaultDate) {
-          this.datesTemp[0] = this.calSvc.createCalendarDay(this._getDayTime(defaultDate), this._d);
+          this.datesTemp[0] = this.calSvc.createCalendarDay(
+            this._getDayTime(defaultDate),
+            this._d,
+          );
         }
         break;
       case 'range':
         if (defaultDateRange) {
           if (defaultDateRange.from) {
-            this.datesTemp[0] = this.calSvc.createCalendarDay(this._getDayTime(defaultDateRange.from), this._d);
+            this.datesTemp[0] = this.calSvc.createCalendarDay(
+              this._getDayTime(defaultDateRange.from),
+              this._d,
+            );
           }
           if (defaultDateRange.to) {
-            this.datesTemp[1] = this.calSvc.createCalendarDay(this._getDayTime(defaultDateRange.to), this._d);
+            this.datesTemp[1] = this.calSvc.createCalendarDay(
+              this._getDayTime(defaultDateRange.to),
+              this._d,
+            );
           }
         }
         break;
       case 'multi':
         if (defaultDates && defaultDates.length) {
-          this.datesTemp = defaultDates.map(e => this.calSvc.createCalendarDay(this._getDayTime(e), this._d));
+          this.datesTemp = defaultDates.map((e) =>
+            this.calSvc.createCalendarDay(this._getDayTime(e), this._d),
+          );
         }
         break;
       default:
@@ -155,7 +179,8 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
     const { cssClass } = this._d;
     if (cssClass) {
       cssClass.split(' ').forEach((_class: string) => {
-        if (_class.trim() !== '') this._renderer.addClass(this._elementRef.nativeElement, _class);
+        if (_class.trim() !== '')
+          this._renderer.addClass(this._elementRef.nativeElement, _class);
       });
     }
   }
@@ -180,7 +205,10 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
   done(): void {
     const { pickMode } = this._d;
 
-    this.modalCtrl.dismiss(this.calSvc.wrapResult(this.datesTemp, pickMode), 'done');
+    this.modalCtrl.dismiss(
+      this.calSvc.wrapResult(this.datesTemp, pickMode),
+      'done',
+    );
   }
 
   canDone(): boolean {
@@ -196,16 +224,27 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
         if (defaultEndDateToStartDate) {
           return !!(this.datesTemp[0] && this.datesTemp[0].time);
         }
-        return !!(this.datesTemp[0] && this.datesTemp[1]) && !!(this.datesTemp[0].time && this.datesTemp[1].time);
+        return (
+          !!(this.datesTemp[0] && this.datesTemp[1]) &&
+          !!(this.datesTemp[0].time && this.datesTemp[1].time)
+        );
       case 'multi':
-        return this.datesTemp.length > 0 && this.datesTemp.every(e => !!e && !!e.time);
+        return (
+          this.datesTemp.length > 0 &&
+          this.datesTemp.every((e) => !!e && !!e.time)
+        );
       default:
         return false;
     }
   }
 
   clear() {
-    this.datesTemp = [null, null];
+    if (this._d.clearResetsToDefault) {
+      this.initDefaultDate();
+    } else {
+      this.datesTemp = [null, null];
+    }
+    this.ref.detectChanges();
   }
 
   canClear() {
@@ -218,12 +257,21 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
     const nextTime = addMonths(final.original.time, 1).valueOf();
     const rangeEnd = this._d.to ? subMonths(this._d.to, 1) : 0;
 
-    if (len <= 0 || (rangeEnd !== 0 && isAfter(final.original.time, rangeEnd))) {
+    if (
+      len <= 0 ||
+      (rangeEnd !== 0 && isAfter(final.original.time, rangeEnd))
+    ) {
       event.target.disabled = true;
       return;
     }
 
-    this.calendarMonths.push(...this.calSvc.createMonthsByPeriod(nextTime, NUM_OF_MONTHS_TO_CREATE, this._d));
+    this.calendarMonths.push(
+      ...this.calSvc.createMonthsByPeriod(
+        nextTime,
+        NUM_OF_MONTHS_TO_CREATE,
+        this._d,
+      ),
+    );
     event.target.complete();
     this.repaintDOM();
   }
@@ -236,16 +284,26 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    const firstTime = (this.actualFirstTime = subMonths(first.original.time, NUM_OF_MONTHS_TO_CREATE).valueOf());
+    const firstTime = (this.actualFirstTime = subMonths(
+      first.original.time,
+      NUM_OF_MONTHS_TO_CREATE,
+    ).valueOf());
 
-    this.calendarMonths.unshift(...this.calSvc.createMonthsByPeriod(firstTime, NUM_OF_MONTHS_TO_CREATE, this._d));
+    this.calendarMonths.unshift(
+      ...this.calSvc.createMonthsByPeriod(
+        firstTime,
+        NUM_OF_MONTHS_TO_CREATE,
+        this._d,
+      ),
+    );
     this.ref.detectChanges();
     this.repaintDOM();
   }
 
   scrollToDate(date: Date): void {
     const defaultDateIndex = this.findInitMonthNumber(date);
-    const monthElement = this.monthsEle().nativeElement.children[`month-${defaultDateIndex}`];
+    const monthElement =
+      this.monthsEle().nativeElement.children[`month-${defaultDateIndex}`];
     const domElemReadyWaitTime = 300;
 
     setTimeout(() => {
@@ -267,19 +325,21 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
     const { detail } = $event;
 
     if (detail.scrollTop <= 200 && detail.velocityY < 0 && this._scrollLock) {
-      this.content().getScrollElement().then(() => {
-        this._scrollLock = !1;
+      this.content()
+        .getScrollElement()
+        .then(() => {
+          this._scrollLock = !1;
 
-        // const heightBeforeMonthPrepend = scrollElem.scrollHeight;
-        this.backwardsMonth();
-        setTimeout(() => {
-          //  const heightAfterMonthPrepend = scrollElem.scrollHeight;
+          // const heightBeforeMonthPrepend = scrollElem.scrollHeight;
+          this.backwardsMonth();
+          setTimeout(() => {
+            //  const heightAfterMonthPrepend = scrollElem.scrollHeight;
 
-          // this.content.scrollByPoint(0, heightAfterMonthPrepend - heightBeforeMonthPrepend, 0).then(() => {
-          this._scrollLock = !0;
-          // });
-        }, 180);
-      });
+            // this.content.scrollByPoint(0, heightAfterMonthPrepend - heightBeforeMonthPrepend, 0).then(() => {
+            this._scrollLock = !0;
+            // });
+          }, 180);
+        });
     }
   }
 
@@ -300,7 +360,9 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
   }
 
   findInitMonthNumber(date: Date): number {
-    let startDate = this.actualFirstTime ? new Date(this.actualFirstTime) : new Date(this._d.from);
+    let startDate = this.actualFirstTime
+      ? new Date(this.actualFirstTime)
+      : new Date(this._d.from);
     const defaultScrollTo = new Date(date);
     const after: boolean = isAfter(defaultScrollTo, startDate);
     if (!after) return -1;
@@ -319,5 +381,4 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
   _monthFormat(date: DefaultDate): string {
     return format(new Date(date), this._d.monthFormat);
   }
-
 }

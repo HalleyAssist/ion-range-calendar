@@ -11,7 +11,9 @@ import { defaults } from '../../config';
 export class MonthPickerComponent {
   readonly month = input<CalendarMonth>(undefined);
   readonly color = input(defaults.COLOR);
-  readonly monthFormat = input(defaults.MONTH_FORMAT, { transform: this.setMonthFormat });
+  readonly monthFormat = input(defaults.MONTH_FORMAT, {
+    transform: this.setMonthFormat,
+  });
 
   select = output<number>();
 

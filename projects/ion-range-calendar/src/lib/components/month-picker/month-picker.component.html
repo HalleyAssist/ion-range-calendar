@@ -1,8 +1,13 @@
 <div [class]="'month-picker ' + color()">
   @for (item of monthFormat(); track i; let i = $index) {
-  <div class="month-packer-item"
-    [class.this-month]=" i === _thisMonth.getMonth() && month().original.year === _thisMonth.getFullYear()">
-    <button type="button" (click)="_onSelect(i)">{{ item }}</button>
-  </div>
+    <div
+      class="month-packer-item"
+      [class.this-month]="
+        i === _thisMonth.getMonth() &&
+        month().original.year === _thisMonth.getFullYear()
+      "
+    >
+      <button type="button" (click)="_onSelect(i)">{{ item }}</button>
+    </div>
   }
 </div>

@@ -7,15 +7,14 @@ import { IonToolbar } from '@ionic/angular/standalone';
   selector: 'ion-range-calendar-week',
   styleUrls: ['./calendar-week.component.scss'],
   templateUrl: 'calendar-week-component.html',
-  imports: [
-    IonToolbar,
-  ]
+  imports: [IonToolbar],
 })
 export class CalendarWeekComponent {
-
   readonly color = input(defaults.COLOR);
 
-  readonly weekArray = input(defaults.WEEKS_FORMAT, { transform: this.setWeekArray });
+  readonly weekArray = input(defaults.WEEKS_FORMAT, {
+    transform: this.setWeekArray,
+  });
 
   readonly weekStart = input(0, { transform: this.setWeekStart });
 
@@ -39,5 +38,4 @@ export class CalendarWeekComponent {
     // return 0 or 1, default 0
     return value === 1 ? 1 : 0;
   }
-
 }

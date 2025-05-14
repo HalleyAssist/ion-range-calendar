@@ -1,7 +1,7 @@
 <ion-toolbar [class]="'week-toolbar ' + color()" no-border-top>
   <ul [class]="'week-title ' + color()">
     @for (w of displayWeekArray(); track $index) {
-    <li>{{ w }}</li>
+      <li>{{ w }}</li>
     }
   </ul>
 </ion-toolbar>

@@ -1,6 +1,17 @@
 import { inject, Injectable } from '@angular/core';
 
-import { addDays, addMonths, format, getDaysInMonth, isAfter, isBefore, isSameDay, isToday, isWithinInterval, subDays } from 'date-fns';
+import {
+  addDays,
+  addMonths,
+  format,
+  getDaysInMonth,
+  isAfter,
+  isBefore,
+  isSameDay,
+  isToday,
+  isWithinInterval,
+  subDays,
+} from 'date-fns';
 
 import {
   CalendarDay,
@@ -17,29 +28,33 @@ import { DEFAULT_CALENDAR_OPTIONS } from './calendar-options.provider';
 
 @Injectable({ providedIn: 'root' })
 export class IonRangeCalendarService {
-
   public opts: CalendarModalOptions;
 
-  private readonly defaultOpts = inject(DEFAULT_CALENDAR_OPTIONS, { optional: true });
+  private readonly defaultOpts = inject(DEFAULT_CALENDAR_OPTIONS, {
+    optional: true,
+  });
 
   readonly DEFAULT_STEP = 12;
 
-  safeOpt(calendarOptions: Partial<CalendarModalOptions> = {}): CalendarModalOptions {
+  safeOpt(
+    calendarOptions: Partial<CalendarModalOptions> = {},
+  ): CalendarModalOptions {
     const _disableWeeks: number[] = [];
     const _daysConfig: DayConfig[] = [];
-    const {
+    let {
+      from = this.defaultOpts?.from || calendarOptions.from || new Date(),
       to = 0,
       weekStart = 0,
       step = this.DEFAULT_STEP,
       cssClass = '',
-      closeLabel = 'CANCEL',
+      closeLabel = 'Cancel',
       closeTitle = '',
-      doneLabel = 'DONE',
+      doneLabel = 'Done',
       doneTitle = '',
-      clearLabel = 'CLEAR',
+      clearLabel = 'Clear',
       clearTitle = '',
       monthFormat = 'MMM yyyy',
-      title = 'CALENDAR',
+      title = 'Calendar',
       defaultTitle = '',
       defaultSubtitle = '',
       autoDone = false,
@@ -56,12 +71,14 @@ export class IonRangeCalendarService {
       showAdjacentMonthDay = true,
       defaultEndDateToStartDate = true,
       maxRange = 0,
+      clearResetsToDefault = false,
     } = { ...this.defaultOpts, ...calendarOptions };
 
-    let from = this.defaultOpts?.from || calendarOptions.from || new Date();
-
     //  if from is not provided, but a default range is, set from to the default range from
-    if (typeof calendarOptions.from === 'undefined' && calendarOptions.defaultDateRange) {
+    if (
+      typeof calendarOptions.from === 'undefined' &&
+      calendarOptions.defaultDateRange
+    ) {
       from = subDays(new Date(calendarOptions.defaultDateRange.from), 1);
     }
 
@@ -73,6 +90,14 @@ export class IonRangeCalendarService {
       } else {
         defaultScrollTo = from ? new Date(from) : new Date();
       }
+    }
+
+    if (
+      clearResetsToDefault &&
+      !this.defaultOpts?.clearLabel &&
+      !calendarOptions.clearLabel
+    ) {
+      clearLabel = 'Reset';
     }
 
     this.opts = {
@@ -109,6 +134,7 @@ export class IonRangeCalendarService {
       showAdjacentMonthDay,
       defaultEndDateToStartDate,
       maxRange,
+      clearResetsToDefault,
     };
     return this.opts;
   }
@@ -132,10 +158,14 @@ export class IonRangeCalendarService {
 
   findDayConfig(day: Date, opt: CalendarModalOptions): DayConfig | undefined {
     if (opt.daysConfig && opt.daysConfig.length <= 0) return null;
-    return opt.daysConfig?.find(n => isSameDay(day, n.date));
+    return opt.daysConfig?.find((n) => isSameDay(day, n.date));
   }
 
-  createCalendarDay(time: number, opt: CalendarModalOptions, month?: number): CalendarDay {
+  createCalendarDay(
+    time: number,
+    opt: CalendarModalOptions,
+    month?: number,
+  ): CalendarDay {
     const _time = new Date(time);
     const date = new Date(time);
     const today = isToday(date);
@@ -145,14 +175,18 @@ export class IonRangeCalendarService {
     const _hasBeg = !!_rangeBeg.valueOf();
     const _hasEnd = !!_rangeEnd.valueOf();
     let isInRange = true;
-    const disableWeeks = opt.disableWeeks && opt.disableWeeks.indexOf(_time.getDay()) !== -1;
+    const disableWeeks =
+      opt.disableWeeks && opt.disableWeeks.indexOf(_time.getDay()) !== -1;
 
     if (_hasBeg && _hasEnd) {
       //  both from and to are set, check if time is in between, unless backwards selection is allowed, then check if time is before to
       if (opt.canBackwardsSelected) {
         isInRange = isBefore(_time, _rangeEnd);
       } else {
-        isInRange = isWithinInterval(_time, { start: _rangeBeg, end: _rangeEnd, });
+        isInRange = isWithinInterval(_time, {
+          start: _rangeBeg,
+          end: _rangeEnd,
+        });
       }
     } else if (_hasBeg && !_hasEnd && !opt.canBackwardsSelected) {
       // if only from is set, check if time is after from, unless backwards selection is allowed
@@ -199,11 +233,18 @@ export class IonRangeCalendarService {
     };
   }
 
-  createCalendarMonth(original: CalendarOriginal, opt: CalendarModalOptions): CalendarMonth {
+  createCalendarMonth(
+    original: CalendarOriginal,
+    opt: CalendarModalOptions,
+  ): CalendarMonth {
     const days: CalendarDay[] = new Array(6).fill(null);
     const len = original.howManyDays;
     for (let i = original.firstWeek; i < len + original.firstWeek; i++) {
-      const itemTime = new Date(original.year, original.month, i - original.firstWeek + 1).getTime();
+      const itemTime = new Date(
+        original.year,
+        original.month,
+        i - original.firstWeek + 1,
+      ).getTime();
       days[i] = this.createCalendarDay(itemTime, opt);
     }
 
@@ -218,19 +259,33 @@ export class IonRangeCalendarService {
     }
 
     if (opt.showAdjacentMonthDay) {
-      const _booleanMap = days.map(e => !!e);
+      const _booleanMap = days.map((e) => !!e);
       const thisMonth = new Date(original.time).getMonth();
       let startOffsetIndex = _booleanMap.indexOf(true) - 1;
       let endOffsetIndex = _booleanMap.lastIndexOf(true) + 1;
       for (startOffsetIndex; startOffsetIndex >= 0; startOffsetIndex--) {
         const dayBefore = subDays(days[startOffsetIndex + 1].time, 1);
-        days[startOffsetIndex] = this.createCalendarDay(dayBefore.valueOf(), opt, thisMonth);
+        days[startOffsetIndex] = this.createCalendarDay(
+          dayBefore.valueOf(),
+          opt,
+          thisMonth,
+        );
       }
 
-      if (!(_booleanMap.length % 7 === 0 && _booleanMap[_booleanMap.length - 1])) {
-        for (endOffsetIndex; endOffsetIndex < days.length + (endOffsetIndex % 7); endOffsetIndex++) {
+      if (
+        !(_booleanMap.length % 7 === 0 && _booleanMap[_booleanMap.length - 1])
+      ) {
+        for (
+          endOffsetIndex;
+          endOffsetIndex < days.length + (endOffsetIndex % 7);
+          endOffsetIndex++
+        ) {
           const dayAfter = addDays(days[endOffsetIndex - 1].time, 1);
-          days[endOffsetIndex] = this.createCalendarDay(dayAfter.valueOf(), opt, thisMonth);
+          days[endOffsetIndex] = this.createCalendarDay(
+            dayAfter.valueOf(),
+            opt,
+            thisMonth,
+          );
         }
       }
     }
@@ -241,11 +296,19 @@ export class IonRangeCalendarService {
     };
   }
 
-  createMonthsByPeriod(startTime: number, monthsNum: number, opt: CalendarModalOptions): CalendarMonth[] {
+  createMonthsByPeriod(
+    startTime: number,
+    monthsNum: number,
+    opt: CalendarModalOptions,
+  ): CalendarMonth[] {
     const _array: CalendarMonth[] = [];
 
     const _start = new Date(startTime);
-    const _startMonth = new Date(_start.getFullYear(), _start.getMonth(), 1).getTime();
+    const _startMonth = new Date(
+      _start.getFullYear(),
+      _start.getMonth(),
+      1,
+    ).getTime();
 
     for (let i = 0; i < monthsNum; i++) {
       const time = addMonths(_startMonth, i).valueOf();
@@ -257,7 +320,11 @@ export class IonRangeCalendarService {
   }
 
   wrapResult(original: CalendarDay[], pickMode: string) {
-    let result: CalendarResult[] | CalendarResult | { from: CalendarResult; to: CalendarResult } | CalendarDay[];
+    let result:
+      | CalendarResult[]
+      | CalendarResult
+      | { from: CalendarResult; to: CalendarResult }
+      | CalendarDay[];
     switch (pickMode) {
       case 'single':
         result = this.multiFormat(original[0].time);
@@ -269,7 +336,7 @@ export class IonRangeCalendarService {
         };
         break;
       case 'multi':
-        result = original.map(e => this.multiFormat(e.time));
+        result = original.map((e) => this.multiFormat(e.time));
         break;
       default:
         result = original;

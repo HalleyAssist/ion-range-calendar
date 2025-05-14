@@ -1,9 +1,23 @@
-import { AfterViewInit, ChangeDetectorRef, Component, forwardRef, inject, input, output, Provider } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  forwardRef,
+  inject,
+  input,
+  output,
+  Provider,
+} from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { IonRangeCalendarService } from '../../services/ion-range-calendar.service';
 
-import { CalendarDay, CalendarMonth, ControlValueType, PickMode } from '../../calendar.types';
+import {
+  CalendarDay,
+  CalendarMonth,
+  ControlValueType,
+  PickMode,
+} from '../../calendar.types';
 
 import { defaults } from '../../config';
 
@@ -24,7 +38,6 @@ export const MONTH_VALUE_ACCESSOR: Provider = {
   standalone: true,
 })
 export class MonthComponent implements ControlValueAccessor, AfterViewInit {
-
   readonly componentMode = input(false);
   readonly month = input<CalendarMonth>();
   readonly pickMode = input<PickMode>();
@@ -75,7 +88,11 @@ export class MonthComponent implements ControlValueAccessor, AfterViewInit {
 
   isEndSelection(day: CalendarDay): boolean {
     if (!day) return false;
-    if (this.pickMode() !== 'range' || !this._isInit || this._date[1] === null) {
+    if (
+      this.pickMode() !== 'range' ||
+      !this._isInit ||
+      this._date[1] === null
+    ) {
       return false;
     }
 
@@ -102,7 +119,11 @@ export class MonthComponent implements ControlValueAccessor, AfterViewInit {
 
   isStartSelection(day: CalendarDay): boolean {
     if (!day) return false;
-    if (this.pickMode() !== 'range' || !this._isInit || this._date[0] === null) {
+    if (
+      this.pickMode() !== 'range' ||
+      !this._isInit ||
+      this._date[0] === null
+    ) {
       return false;
     }
 
@@ -120,7 +141,9 @@ export class MonthComponent implements ControlValueAccessor, AfterViewInit {
           return time === this._date[1].time;
         }
       } else {
-        return this._date.findIndex(e => e !== null && e.time === time) !== -1;
+        return (
+          this._date.findIndex((e) => e !== null && e.time === time) !== -1
+        );
       }
     }
     return false;
@@ -185,7 +208,8 @@ export class MonthComponent implements ControlValueAccessor, AfterViewInit {
         this.selectStart.emit(this._date[0]);
         let end = addDays(this._date[0].time, range);
         //  if end is after service.opts.to, set end to service.opts.to
-        if (isAfter(end, this.service.opts.to)) end = startOfDay(this.service.opts.to);
+        if (isAfter(end, this.service.opts.to))
+          end = startOfDay(this.service.opts.to);
         this._date[1].time = +end;
         this.selectEnd.emit(this._date[1]);
       }
@@ -195,22 +219,26 @@ export class MonthComponent implements ControlValueAccessor, AfterViewInit {
     }
 
     if (this.pickMode() === 'multi') {
-      const index = this._date.findIndex(e => e !== null && e.time === item.time);
+      const index = this._date.findIndex(
+        (e) => e !== null && e.time === item.time,
+      );
 
       if (index === -1) {
         this._date.push(item);
       } else {
         this._date.splice(index, 1);
       }
-      this.ionChange.emit(this._date.filter(e => e !== null));
+      this.ionChange.emit(this._date.filter((e) => e !== null));
     }
   }
-
 
   // if max range and end minus max range is greater than start, set start to end minus max range
   private adjustStart(maxRange: number) {
     if (maxRange > 0 && this._date[1].time - maxRange > this._date[0].time) {
-      this._date[0].time = +subDays(this._date[1].time, this.service.opts.maxRange - 1);
+      this._date[0].time = +subDays(
+        this._date[1].time,
+        this.service.opts.maxRange - 1,
+      );
       this.selectStart.emit(this._date[0]);
     }
   }
@@ -218,7 +246,10 @@ export class MonthComponent implements ControlValueAccessor, AfterViewInit {
   //  if max range and start plus max range is less than end, set end to start plus max range
   private adjustEnd(maxRange: number) {
     if (maxRange > 0 && this._date[0].time + maxRange < this._date[1].time) {
-      this._date[1].time = +addDays(this._date[0].time, this.service.opts.maxRange - 1);
+      this._date[1].time = +addDays(
+        this._date[0].time,
+        this.service.opts.maxRange - 1,
+      );
       this.selectEnd.emit(this._date[1]);
     }
   }

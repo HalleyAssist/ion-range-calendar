@@ -1,4 +1,9 @@
-import { ComponentFixture, fakeAsync, flush, TestBed } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  fakeAsync,
+  flush,
+  TestBed,
+} from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
@@ -20,7 +25,9 @@ describe('AppComponent', () => {
   beforeEach(async () => {
     modalSpy = jasmine.createSpyObj('HTMLIonModalElement', {
       present: Promise.resolve(),
-      onWillDismiss: Promise.resolve({ data: { from: new Date(2020, 0, 1), to: new Date(2020, 0, 2) } }),
+      onWillDismiss: Promise.resolve({
+        data: { from: new Date(2020, 0, 1), to: new Date(2020, 0, 2) },
+      }),
     });
     modalCtrlSpy = jasmine.createSpyObj('ModalController', {
       create: Promise.resolve(modalSpy),
@@ -34,9 +41,7 @@ describe('AppComponent', () => {
         IonSelect,
         AppComponent,
       ],
-      providers: [
-        { provide: ModalController, useValue: modalCtrlSpy },
-      ],
+      providers: [{ provide: ModalController, useValue: modalCtrlSpy }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(AppComponent);

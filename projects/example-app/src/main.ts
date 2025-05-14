@@ -14,7 +14,6 @@ bootstrapApplication(AppComponent, {
   providers: [
     provideIonicAngular({
       useSetInputAPI: true, //  required for input signals on controller based modals.
-    })
-  ]
-})
-  .catch(err => console.error(err));
+    }),
+  ],
+}).catch((err) => console.error(err));

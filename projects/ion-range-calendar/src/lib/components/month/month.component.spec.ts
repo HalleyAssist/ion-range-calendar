@@ -3,7 +3,11 @@ import { FormsModule } from '@angular/forms';
 
 import { addDays, parse, startOfDay, subDays } from 'date-fns';
 
-import { CalendarDay, CalendarModalOptions, CalendarMonth } from '../../calendar.types';
+import {
+  CalendarDay,
+  CalendarModalOptions,
+  CalendarMonth,
+} from '../../calendar.types';
 
 import { MonthComponent } from './month.component';
 
@@ -45,10 +49,7 @@ describe('MonthComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        FormsModule,
-        MonthComponent,
-      ],
+      imports: [FormsModule, MonthComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(MonthComponent);
@@ -56,7 +57,11 @@ describe('MonthComponent', () => {
     //  set service opts.
     component.service.safeOpt(opts);
     //  create month
-    month = component.service.createMonthsByPeriod(new Date('2022-04-01').valueOf(), 1, opts)[0];
+    month = component.service.createMonthsByPeriod(
+      new Date('2022-04-01').valueOf(),
+      1,
+      opts,
+    )[0];
     //  set required component inputs
     fixture.componentRef.setInput('month', month);
     fixture.componentRef.setInput('pickMode', 'range');
@@ -151,6 +156,5 @@ describe('MonthComponent', () => {
       expectedStart.time = +subDays(newEnd.time, 27);
       expect(component.value).toEqual([expectedStart, newEnd]);
     });
-
   });
 });
