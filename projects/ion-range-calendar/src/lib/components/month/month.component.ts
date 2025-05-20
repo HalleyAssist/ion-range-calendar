@@ -41,7 +41,6 @@ export class MonthComponent implements ControlValueAccessor, AfterViewInit {
   readonly componentMode = input(false);
   readonly month = input<CalendarMonth>();
   readonly pickMode = input<PickMode>();
-  readonly isSaveHistory = input<boolean>(undefined);
   readonly readonly = input(false);
   readonly color = input<string>(defaults.COLOR);
 

@@ -62,7 +62,6 @@ export class IonRangeCalendarService {
       closeIcon = false,
       doneIcon = false,
       clearIcon = false,
-      isSaveHistory = false,
       pickMode = 'single',
       color = defaults.COLOR,
       weekdays = defaults.WEEKS_FORMAT,
@@ -118,7 +117,6 @@ export class IonRangeCalendarService {
       clearIcon,
       clearTitle,
       canBackwardsSelected,
-      isSaveHistory,
       disableWeeks,
       monthFormat,
       title,
@@ -128,6 +126,14 @@ export class IonRangeCalendarService {
       defaultTitle,
       defaultSubtitle,
       defaultScrollTo,
+      initialDate:
+        calendarOptions.initialDate || calendarOptions.defaultDate || null,
+      initialDates:
+        calendarOptions.initialDates || calendarOptions.defaultDates || null,
+      initialDateRange:
+        calendarOptions.initialDateRange ||
+        calendarOptions.defaultDateRange ||
+        null,
       defaultDate: calendarOptions.defaultDate || null,
       defaultDates: calendarOptions.defaultDates || null,
       defaultDateRange: calendarOptions.defaultDateRange || null,

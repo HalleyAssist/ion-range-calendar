@@ -15,6 +15,10 @@
 
 * `"@ionic/angular": ">=8.2.0"`
 
+# Breaking changes 19.0.0
+
+  Since the conversion from traditional `@Input` to Signal `input`, the Modal version requires `useSetInputAPI` to be set to true, see [As Modal](#as-modal) for more details.
+
 ## Usage
 
 ### Installation
@@ -415,9 +419,12 @@ openCalendar() {
 | title                     | `string`                   | `'CALENDAR'`                          | title                                                      |
 | color                     | `string`                   | `'primary'`                           | 'primary', 'secondary', 'danger', 'light', 'dark'          |
 | defaultScrollTo           | `Date`                     | undefined                             | let the view scroll to the default date                    |
-| defaultDate               | `Date`                     | undefined                             | default date data, apply to single                         |
-| defaultDates              | `Array<Date>`              | undefined                             | default dates data, apply to multi                         |
-| defaultDateRange          | `{ from: Date, to: Date }` | undefined                             | default date-range data, apply to range                    |
+| initialDate               | `Date`                     | undefined                             | initial date data, applies to single                       |
+| defaultDate               | `Date`                     | undefined                             | default date data, applies to single                       |
+| initialDates              | `Array<Date>`              | undefined                             | initial dates data, applies to multi                       |
+| defaultDates              | `Array<Date>`              | undefined                             | default dates data, applies to multi                       |
+| initialDateRange          | `{ from: Date, to: Date }` | undefined                             | initial date-range data, applies to range                  |
+| defaultDateRange          | `{ from: Date, to: Date }` | undefined                             | default date-range data, applies to range                  |
 | defaultTitle              | `string`                   | ''                                    | default title in days                                      |
 | defaultSubtitle           | `string`                   | ''                                    | default subtitle in days                                   |
 | cssClass                  | `string`                   | `''`                                  | Additional classes for custom styles, separated by spaces. |
@@ -436,6 +443,7 @@ openCalendar() {
 | step                      | `number`                   | `12`                                  | month load stepping interval to when scroll                |
 | defaultEndDateToStartDate | `boolean`                  | `false`                               | makes the end date optional, will default it to the start  |
 | maxRange                  | `number`                   | 0                                     | The maximum range of the selection in days                 |
+| clearResetsToDefault      | `boolean`                  | `false`                               | clear button resets to default date                        |
 
 ### onDidDismiss Output `{ data } = event`
 

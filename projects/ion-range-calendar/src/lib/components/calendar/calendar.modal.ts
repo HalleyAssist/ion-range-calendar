@@ -112,7 +112,7 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.init();
-    this.initDefaultDate();
+    this.initDefaultDate(true);
   }
 
   ngAfterViewInit(): void {
@@ -136,36 +136,49 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
     );
   }
 
-  initDefaultDate(): void {
-    const { pickMode, defaultDate, defaultDateRange, defaultDates } = this._d;
+  initDefaultDate(init = false): void {
+    const {
+      pickMode,
+      initialDate,
+      initialDates,
+      initialDateRange,
+      defaultDate,
+      defaultDateRange,
+      defaultDates,
+    } = this._d;
+
+    const date = init ? initialDate : defaultDate;
+    const dateRange = init ? initialDateRange : defaultDateRange;
+    const dates = init ? initialDates : defaultDates;
+
     switch (pickMode) {
       case 'single':
-        if (defaultDate) {
+        if (date) {
           this.datesTemp[0] = this.calSvc.createCalendarDay(
-            this._getDayTime(defaultDate),
+            this._getDayTime(date),
             this._d,
           );
         }
         break;
       case 'range':
-        if (defaultDateRange) {
-          if (defaultDateRange.from) {
+        if (dateRange) {
+          if (dateRange.from) {
             this.datesTemp[0] = this.calSvc.createCalendarDay(
-              this._getDayTime(defaultDateRange.from),
+              this._getDayTime(dateRange.from),
               this._d,
             );
           }
-          if (defaultDateRange.to) {
+          if (dateRange.to) {
             this.datesTemp[1] = this.calSvc.createCalendarDay(
-              this._getDayTime(defaultDateRange.to),
+              this._getDayTime(dateRange.to),
               this._d,
             );
           }
         }
         break;
       case 'multi':
-        if (defaultDates && defaultDates.length) {
-          this.datesTemp = defaultDates.map((e) =>
+        if (dates && dates.length) {
+          this.datesTemp = dates.map((e) =>
             this.calSvc.createCalendarDay(this._getDayTime(e), this._d),
           );
         }

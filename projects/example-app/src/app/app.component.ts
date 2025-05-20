@@ -68,6 +68,7 @@ export class AppComponent {
     cssClass: 'calendar',
     canBackwardsSelected: true,
     to: new Date(),
+    initialDateRange: { to: this.to, from: subDays(this.from, 7) },
     defaultDateRange: { to: this.to, from: this.from },
     doneIcon: true,
     clearIcon: true,
